@@ -13,7 +13,7 @@
     <FlowDirection x:Key="FlowDirection">LeftToRight</FlowDirection>
 
     <!--  Welcome Messages  -->
-    <sys:String x:Key="WelcomeMessage">Welcome to Bank ATM Management System</sys:String>
+    <sys:String x:Key="WelcomeMessage">Welcome to Bank ATM Management sys</sys:String>
 
     <!--  Login Screen  -->
     <sys:String x:Key="LoginTitle">Login</sys:String>
@@ -24,24 +24,22 @@
     <sys:String x:Key="DomainUsername">Domain Username</sys:String>
     <sys:String x:Key="RememberMe">Remember me</sys:String>
 
-    <!--  Supervisor Profile  -->
-    <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>
+    <!--  Supervisor Profile Screen  -->
     <sys:String x:Key="Name">Name</sys:String>
+    <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>
+    <sys:String x:Key="Welcome">Welcome</sys:String>
+    <sys:String x:Key="UserInformation">User Information</sys:String>
+    <sys:String x:Key="FullName">Full Name</sys:String>
     <sys:String x:Key="BranchNumber">Branch Number</sys:String>
     <sys:String x:Key="BranchName">Branch Name</sys:String>
     <sys:String x:Key="ATMCollection">ATM Collection</sys:String>
     <sys:String x:Key="ATMCount">ATM Count</sys:String>
-
-    <!--  ATM Management  -->
     <sys:String x:Key="AddATM">Add ATM</sys:String>
-    <sys:String x:Key="ATMType">ATM Type</sys:String>
-    <sys:String x:Key="ATMName">ATM Name</sys:String>
-    <sys:String x:Key="ATMNumber">ATM Number</sys:String>
-    <sys:String x:Key="GLNumber">GL Number</sys:String>
-    <sys:String x:Key="NumberOfCassettes">Number of Cassettes</sys:String>
-    <sys:String x:Key="DenominationType">Denomination Type</sys:String>
-    <sys:String x:Key="Save">Save</sys:String>
-    <sys:String x:Key="Cancel">Cancel</sys:String>
+    <sys:String x:Key="NoATMsMessage">No ATMs configured yet. Click 'Add ATM' to get started.</sys:String>
+    <sys:String x:Key="LastLogin">Last Login</sys:String>
+    <sys:String x:Key="Logout">Logout</sys:String>
+    <sys:String x:Key="Refresh">Refresh</sys:String>
+    <sys:String x:Key="Loading">Loading...</sys:String>
 
     <!--  Common  -->
     <sys:String x:Key="OK">OK</sys:String>

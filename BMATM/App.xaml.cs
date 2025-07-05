@@ -22,6 +22,7 @@ public partial class App : Application
     {
         // Register Services
         services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
+        services.AddSingleton<IUserDataService, LocalUserDataService>();
         // ... more services
 
         // Register ViewModels        

@@ -22,24 +22,22 @@
     <sys:String x:Key="DomainUsername">اسم المستخدم</sys:String>
     <sys:String x:Key="RememberMe">تذكرني</sys:String>
 
-    <!--  Supervisor Profile  -->
-    <sys:String x:Key="SupervisorProfile">ملف المشرف</sys:String>
+    <!--  Supervisor Profile Screen  -->
     <sys:String x:Key="Name">الاسم</sys:String>
+    <sys:String x:Key="SupervisorProfile">ملف المشرف</sys:String>
+    <sys:String x:Key="Welcome">أهلاً وسهلاً</sys:String>
+    <sys:String x:Key="UserInformation">معلومات المستخدم</sys:String>
+    <sys:String x:Key="FullName">الاسم الكامل</sys:String>
     <sys:String x:Key="BranchNumber">رقم الفرع</sys:String>
     <sys:String x:Key="BranchName">اسم الفرع</sys:String>
     <sys:String x:Key="ATMCollection">مجموعة أجهزة الصراف الآلي</sys:String>
     <sys:String x:Key="ATMCount">عدد أجهزة الصراف الآلي</sys:String>
-
-    <!--  ATM Management  -->
-    <sys:String x:Key="AddATM">إضافة جهاز صراف آلي</sys:String>
-    <sys:String x:Key="ATMType">نوع الجهاز</sys:String>
-    <sys:String x:Key="ATMName">اسم الجهاز</sys:String>
-    <sys:String x:Key="ATMNumber">رقم الجهاز</sys:String>
-    <sys:String x:Key="GLNumber">رقم الحساب العام</sys:String>
-    <sys:String x:Key="NumberOfCassettes">عدد الكاسيتات</sys:String>
-    <sys:String x:Key="DenominationType">نوع الفئة</sys:String>
-    <sys:String x:Key="Save">حفظ</sys:String>
-    <sys:String x:Key="Cancel">إلغاء</sys:String>
+    <sys:String x:Key="AddATM">إضافة صراف آلي</sys:String>
+    <sys:String x:Key="NoATMsMessage">لم يتم تكوين أي أجهزة صراف آلي بعد. انقر على 'إضافة صراف آلي' للبدء.</sys:String>
+    <sys:String x:Key="LastLogin">آخر تسجيل دخول</sys:String>
+    <sys:String x:Key="Logout">تسجيل الخروج</sys:String>
+    <sys:String x:Key="Refresh">تحديث</sys:String>
+    <sys:String x:Key="Loading">جاري التحميل...</sys:String>
 
     <!--  Common  -->
     <sys:String x:Key="OK">موافق</sys:String>
