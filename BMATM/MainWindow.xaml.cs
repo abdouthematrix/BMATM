@@ -4,12 +4,9 @@ namespace BMATM;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(MainWindowViewModel viewModel)
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel();
-
-        // Show login view by default
-        MainContent.Content = new LoginView();
+        DataContext = viewModel;
     }
 }

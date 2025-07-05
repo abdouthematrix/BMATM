@@ -4,7 +4,7 @@ namespace BMATM.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private string _currentLanguage = "en";
+    private string _currentLanguage;
     private UserControl? _currentView;
 
     public string CurrentLanguage
@@ -14,9 +14,15 @@ public class MainWindowViewModel : ViewModelBase
         {
             _currentLanguage = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(CurrentLanguageLabel));
         }
     }
 
+    public string CurrentLanguageLabel => "🌐 " +
+     (CurrentLanguage == "en"
+         ? "العربية"
+         : "English");
+   
     public UserControl? CurrentView
     {
         get => _currentView;
@@ -27,7 +33,9 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        SwitchLanguageCommand = new RelayCommand<string>(SwitchLanguage);
+        CurrentLanguage = Settings.Default.Language;
+        App.SetLanguage(CurrentLanguage);       
+        SwitchLanguageCommand = new RelayCommand(SwitchLanguage);
 
         // Subscribe to navigation events
         NavigationHelper.NavigationRequested += OnNavigationRequested;
@@ -41,12 +49,16 @@ public class MainWindowViewModel : ViewModelBase
         CurrentView = view;
     }
 
-    private void SwitchLanguage(string languageCode)
+    private void SwitchLanguage()
     {
-        if (string.IsNullOrEmpty(languageCode) || languageCode == CurrentLanguage)
-            return;
+        var newLanguage = CurrentLanguage switch
+        {
+            "en" => "ar",
+            "ar" => "en",
+            _ => "en"
+        };
 
-        CurrentLanguage = languageCode;
-        App.SetLanguage(languageCode);
+        CurrentLanguage = newLanguage;        
+        App.SetLanguage(newLanguage);
     }
 }

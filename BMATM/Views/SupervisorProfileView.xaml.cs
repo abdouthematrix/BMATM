@@ -6,9 +6,9 @@ namespace BMATM.Views;
 
 public partial class SupervisorProfileView : UserControl
 {
-    public SupervisorProfileView()
+    public SupervisorProfileView(SupervisorProfileViewModel viewModel)
     {
         InitializeComponent();
-        DataContext = new SupervisorProfileViewModel(new MockAuthenticationService());
+        DataContext = viewModel;
     }
 }

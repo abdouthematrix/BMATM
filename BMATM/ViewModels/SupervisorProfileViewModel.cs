@@ -31,18 +31,12 @@ public class SupervisorProfileViewModel : ViewModelBase
     private async Task LogoutAsync()
     {
         await _authenticationService.LogoutAsync();
-        NavigateToLogin();
+        NavigationHelper.NavigateTo<LoginView>();
     }
 
     private void AddATM()
     {
         // TODO: Navigate to Add ATM view
         // This will be implemented in the next phase
-    }
-
-    private void NavigateToLogin()
-    {
-        var loginView = new LoginView();
-        Application.Current.MainWindow.Content = loginView;
     }
 }

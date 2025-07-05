@@ -6,8 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:BMATM.Views"
     Title="{DynamicResource AppTitle}"
-    Width="800"
-    Height="600"
+    Width="{x:Static SystemParameters.MaximizedPrimaryScreenWidth}"
+    Height="{x:Static SystemParameters.MaximizedPrimaryScreenHeight}"
     FlowDirection="{DynamicResource FlowDirection}"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
@@ -42,13 +42,7 @@
                     <Button
                         Margin="0,0,5,0"
                         Command="{Binding SwitchLanguageCommand}"
-                        CommandParameter="ar"
-                        Content="العربية"
-                        Style="{DynamicResource LanguageButtonStyle}" />
-                    <Button
-                        Command="{Binding SwitchLanguageCommand}"
-                        CommandParameter="en"
-                        Content="English"
+                        Content="{Binding CurrentLanguageLabel, UpdateSourceTrigger=PropertyChanged}"
                         Style="{DynamicResource LanguageButtonStyle}" />
                 </StackPanel>
             </Grid>

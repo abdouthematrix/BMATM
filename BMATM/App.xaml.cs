@@ -1,15 +1,52 @@
-﻿namespace BMATM;
+﻿
+
+namespace BMATM;
 public partial class App : Application
 {
-    private static bool _isLanguageMetadataSet = false;
-
-    protected override void OnStartup(StartupEventArgs e)
+    public static IHost AppHost { get; private set; }
+    private void Application_Startup(object sender, StartupEventArgs e)
     {
-        base.OnStartup(e);
-
-        // Set default culture
-        SetLanguage("en");
+        AppHost = Host.CreateDefaultBuilder()
+           .ConfigureServices((context, services) =>
+           {
+               ConfigureServices(services);
+           })
+           .Build();
+        AppHost.Start();
+        // Resolve and show MainWindow via DI
+        var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
+        mainWindow.Show();
     }
+
+    private void ConfigureServices(IServiceCollection services)
+    {
+        // Register Services
+        services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
+        // ... more services
+
+        // Register ViewModels        
+        services.AddTransient<LoginViewModel>();
+        services.AddTransient<SupervisorProfileViewModel>();
+
+        services.AddSingleton<MainWindowViewModel>();
+        // ... more VMs
+
+        // Register Views        
+        services.AddTransient<LoginView>();
+        services.AddTransient<SupervisorProfileView>();
+
+        services.AddSingleton<MainWindow>();
+        // ... more Views
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        await AppHost.StopAsync();
+        AppHost.Dispose();
+        base.OnExit(e);
+    }
+
+    private static bool _isLanguageMetadataSet = false;
 
     public static void SetLanguage(string languageCode)
     {
@@ -27,11 +64,44 @@ public partial class App : Application
         }
 
         // Update resource dictionary
-        var dict = new ResourceDictionary();
-        dict.Source = new Uri($"Resources/Strings.{languageCode}.xaml", UriKind.Relative);
+        var newLanguage = new ResourceDictionary();
+        newLanguage.Source = new Uri($"Resources/Strings.{languageCode}.xaml", UriKind.Relative);
 
-        Application.Current.Resources.MergedDictionaries.Clear();
-        Application.Current.Resources.MergedDictionaries.Add(dict);
-        Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("Resources/Styles.xaml", UriKind.Relative) });
+        // Remove any previous Localization dictionaries loaded
+        int langDictId = -1;
+        for (int i = 0; i < Application.Current.Resources.MergedDictionaries.Count; i++)
+        {
+            var md = Application.Current.Resources.MergedDictionaries[i];
+            // Make sure your Localization ResourceDictionarys have the ResourceDictionaryName
+            // key and that it is set to a value starting with "Loc-".
+            if (md.Contains("ResourceDictionaryName"))
+            {
+                if (md["ResourceDictionaryName"].ToString().StartsWith("Strings."))
+                {
+                    langDictId = i;
+                    break;
+                }
+            }
+        }
+        if (langDictId == -1)
+        {
+            // Add in newly loaded Resource Dictionary
+            Application.Current.Resources.MergedDictionaries.Add(newLanguage);
+        }
+        else
+        {
+            // Replace the current langage dictionary with the new one
+            Application.Current.Resources.MergedDictionaries[langDictId] = newLanguage;
+        }
+
+        // Set FlowDirection if present
+        if (newLanguage["FlowDirection"] is FlowDirection flowDirection)
+        {
+            if (Application.Current.MainWindow != null)
+                Application.Current.MainWindow.FlowDirection = flowDirection;
+        }
+
+        Settings.Default.Language = languageCode;
+        Settings.Default.Save();
     }
 }

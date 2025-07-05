@@ -11,9 +11,13 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Windows.Data;
 
+global using BMATM.Properties;
 global using BMATM.ViewModels;
 global using BMATM.Commands;
 global using BMATM.Models;
 global using BMATM.Services;
 global using BMATM.Helpers;
 global using BMATM.Views;
+
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.DependencyInjection;

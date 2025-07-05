@@ -13,6 +13,16 @@ public class MockAuthenticationService : IAuthenticationService
         {
             new User
             {
+                Username = "abdelrahmanhas",
+                DisplayName = "Abdelrahman Hassan",
+                Email = "abdelrahmanhas@banquemisr.com",
+                Role = UserRole.Supervisor,
+                Department = "Branchs",
+                BranchCode = "707",
+                BranchName = "Sheraton Cairo Branch"
+            },
+            new User
+            {
                 Username = "admin",
                 DisplayName = "Administrator",
                 Email = "admin@bank.com",
@@ -60,7 +70,7 @@ public class MockAuthenticationService : IAuthenticationService
         // Simple mock authentication - in real app, this would validate against AD/database
         var user = _mockUsers.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
-        if (user != null && password == "password") // Mock password check
+        if (user != null && (password == "password" || password == "123")) // Mock password check
         {
             _currentUser = user;
             _currentUser.LastLogin = DateTime.Now;

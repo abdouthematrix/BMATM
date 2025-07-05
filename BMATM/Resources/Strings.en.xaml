@@ -3,6 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <!--  The name of this ResourceDictionary. Should not be localized.  -->
+    <sys:String x:Key="ResourceDictionaryName">Strings.en</sys:String>
+
     <!--  Application Title  -->
     <sys:String x:Key="AppTitle">BMATM - Bank ATM Management</sys:String>
 
@@ -19,6 +22,7 @@
     <sys:String x:Key="LoginButton">Login</sys:String>
     <sys:String x:Key="LoginError">Invalid username or password</sys:String>
     <sys:String x:Key="DomainUsername">Domain Username</sys:String>
+    <sys:String x:Key="RememberMe">Remember me</sys:String>
 
     <!--  Supervisor Profile  -->
     <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>

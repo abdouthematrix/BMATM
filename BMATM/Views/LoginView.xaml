@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    FlowDirection="{DynamicResource FlowDirection}"
     mc:Ignorable="d">
 
     <Grid Background="{DynamicResource BackgroundColor}">
@@ -42,17 +41,21 @@
 
                 <!--  Username Field  -->
                 <TextBlock Style="{DynamicResource LabelStyle}" Text="{DynamicResource DomainUsername}" />
+
                 <TextBox
-                    Height="40"
                     Margin="0,0,0,20"
                     Style="{DynamicResource InputTextBoxStyle}"
                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+
+                <CheckBox
+                    Margin="0,0,0,20"
+                    Content="{DynamicResource RememberMe}"
+                    IsChecked="{Binding RememberMe}" />
 
                 <!--  Password Field  -->
                 <TextBlock Style="{DynamicResource LabelStyle}" Text="{DynamicResource Password}" />
                 <PasswordBox
                     x:Name="PasswordBox"
-                    Height="40"
                     Margin="0,0,0,20"
                     Padding="10,8"
                     FontSize="14"
