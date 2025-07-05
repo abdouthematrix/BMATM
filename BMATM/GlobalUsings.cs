@@ -9,6 +9,7 @@ global using System.Windows.Controls;
 global using System.Threading.Tasks;
 global using System.Collections.Generic;
 global using System.Linq;
+global using System.Windows.Data;
 
 global using BMATM.ViewModels;
 global using BMATM.Commands;

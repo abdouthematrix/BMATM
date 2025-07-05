@@ -29,8 +29,16 @@ public class MainWindowViewModel : ViewModelBase
     {
         SwitchLanguageCommand = new RelayCommand<string>(SwitchLanguage);
 
-        // Set initial view to login
-        CurrentView = new LoginView();
+        // Subscribe to navigation events
+        NavigationHelper.NavigationRequested += OnNavigationRequested;
+
+        // Start with login view
+        NavigationHelper.NavigateTo<LoginView>();
+    }
+
+    private void OnNavigationRequested(UserControl view)
+    {
+        CurrentView = view;
     }
 
     private void SwitchLanguage(string languageCode)
