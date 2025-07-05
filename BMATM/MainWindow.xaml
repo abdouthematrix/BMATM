@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:BMATM.Views"
     Title="{DynamicResource AppTitle}"
     Width="800"
     Height="600"
@@ -53,13 +54,10 @@
             </Grid>
         </Border>
 
-        <!--  Main Content  -->
-        <Grid Grid.Row="1">
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Style="{DynamicResource WelcomeTextStyle}"
-                Text="{DynamicResource WelcomeMessage}" />
-        </Grid>
+        <!--  Main Content Area  -->
+        <ContentControl
+            x:Name="MainContent"
+            Grid.Row="1"
+            Content="{Binding CurrentView}" />
     </Grid>
 </Window>

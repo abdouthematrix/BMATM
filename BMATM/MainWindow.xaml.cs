@@ -1,4 +1,6 @@
-﻿namespace BMATM;
+﻿using BMATM.Views;
+
+namespace BMATM;
 
 public partial class MainWindow : Window
 {
@@ -6,5 +8,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = new MainWindowViewModel();
+
+        // Show login view by default
+        MainContent.Content = new LoginView();
     }
 }
