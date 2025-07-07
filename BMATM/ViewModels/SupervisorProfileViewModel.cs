@@ -1,19 +1,13 @@
 ﻿namespace BMATM.ViewModels;
-
 public class SupervisorProfileViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly IUserDataService _userDataService;
-    private User? _currentUser;
+    private readonly IATMDataService _atmDataService;
     private SupervisorProfile? _supervisorProfile;
     private bool _isLoading;
-    private string _atmCountDisplay = "0";
-
-    public User? CurrentUser
-    {
-        get => _currentUser;
-        set => SetProperty(ref _currentUser, value);
-    }
+    private ObservableCollection<ATMInfo> _atms;
+    private ATMInfo _selectedATM;
 
     public SupervisorProfile? SupervisorProfile
     {
@@ -27,29 +21,43 @@ public class SupervisorProfileViewModel : ViewModelBase
         set => SetProperty(ref _isLoading, value);
     }
 
-    public string AtmCountDisplay
+    public ObservableCollection<ATMInfo> ATMs
     {
-        get => _atmCountDisplay;
-        set => SetProperty(ref _atmCountDisplay, value);
+        get => _atms;
+        set => SetProperty(ref _atms, value);
     }
 
-    public string FullName => SupervisorProfile?.FullName ?? CurrentUser?.DisplayName ?? "N/A";
-    public string BranchNumber => SupervisorProfile?.BranchNumber ?? CurrentUser?.BranchCode ?? "N/A";
-    public string BranchName => SupervisorProfile?.BranchName ?? CurrentUser?.BranchName ?? "N/A";
-    public string Username => SupervisorProfile?.Username ?? CurrentUser?.Username ?? "N/A";
-    public string LastLoginDisplay => SupervisorProfile?.LastLoginDate.ToString("dd/MM/yyyy HH:mm") ?? "N/A";
+    public ATMInfo SelectedATM
+    {
+        get => _selectedATM;
+        set
+        {
+            SetProperty(ref _selectedATM, value);
+            ((RelayCommand<ATMInfo>)EditATMCommand).RaiseCanExecuteChanged();
+            ((RelayCommand<ATMInfo>)DeleteATMCommand).RaiseCanExecuteChanged();
+        }
+    }
 
     public ICommand LogoutCommand { get; }
     public ICommand AddATMCommand { get; }
+    public ICommand EditATMCommand { get; }
+    public ICommand DeleteATMCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public SupervisorProfileViewModel(IAuthenticationService authenticationService, IUserDataService userDataService)
+    public SupervisorProfileViewModel(
+        IAuthenticationService authenticationService,
+        IUserDataService userDataService,
+        IATMDataService atmDataService)
     {
         _authenticationService = authenticationService;
         _userDataService = userDataService;
+        _atmDataService = atmDataService;
+        _atms = new ObservableCollection<ATMInfo>();
 
         LogoutCommand = new RelayCommand(async () => await LogoutAsync());
         AddATMCommand = new RelayCommand(AddATM);
+        EditATMCommand = new RelayCommand<ATMInfo>(ExecuteEditATM, CanExecuteEditATM);
+        DeleteATMCommand = new RelayCommand<ATMInfo>(ExecuteDeleteATM, CanExecuteDeleteATM);
         RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());
 
         _ = LoadUserDataAsync();
@@ -62,26 +70,20 @@ public class SupervisorProfileViewModel : ViewModelBase
             IsLoading = true;
 
             // Load current user from authentication service
-            CurrentUser = await _authenticationService.GetCurrentUserAsync();
+            var currentUser = await _authenticationService.GetCurrentUserAsync();
 
-            if (CurrentUser != null)
+            if (currentUser != null)
             {
                 // Load or create supervisor profile
-                SupervisorProfile = await _userDataService.GetSupervisorProfileAsync(CurrentUser.Username);
+                SupervisorProfile = await _userDataService.GetSupervisorProfileAsync(currentUser.Username);
 
                 if (SupervisorProfile == null)
                 {
-                    // Create new profile if it doesn't exist
+                    // Create new supervisor profile if it doesn't exist
                     SupervisorProfile = new SupervisorProfile
                     {
-                        Username = CurrentUser.Username,
-                        FullName = CurrentUser.DisplayName,
-                        BranchNumber = CurrentUser.BranchCode,
-                        BranchName = CurrentUser.BranchName,
-                        AtmCollectionCount = 0,
-                        EmployeeId = CurrentUser.Username,
-                        LastLoginDate = DateTime.Now,
-                        IsActive = true
+                        User = currentUser,
+                        ATMs = new ObservableCollection<ATMInfo>()
                     };
 
                     await _userDataService.SaveSupervisorProfileAsync(SupervisorProfile);
@@ -89,23 +91,16 @@ public class SupervisorProfileViewModel : ViewModelBase
                 else
                 {
                     // Update last login date
-                    SupervisorProfile.LastLoginDate = DateTime.Now;
+                    SupervisorProfile.User.LastLogin = DateTime.Now;
                     await _userDataService.UpdateSupervisorProfileAsync(SupervisorProfile);
                 }
 
-                UpdateAtmCountDisplay();
-
-                // Notify property changes
-                OnPropertyChanged(nameof(FullName));
-                OnPropertyChanged(nameof(BranchNumber));
-                OnPropertyChanged(nameof(BranchName));
-                OnPropertyChanged(nameof(Username));
-                OnPropertyChanged(nameof(LastLoginDisplay));
+                // Load ATMs
+                await LoadATMsAsync();
             }
         }
         catch (Exception ex)
         {
-            // Handle error - in a real app, you might want to show a message to the user
             System.Diagnostics.Debug.WriteLine($"Error loading user data: {ex.Message}");
         }
         finally
@@ -114,11 +109,27 @@ public class SupervisorProfileViewModel : ViewModelBase
         }
     }
 
-    private void UpdateAtmCountDisplay()
+    private async Task LoadATMsAsync()
     {
-        if (SupervisorProfile != null)
+        try
         {
-            AtmCountDisplay = SupervisorProfile.AtmCollectionCount.ToString();
+            var atms = await _atmDataService.GetAllATMsAsync();
+            ATMs.Clear();
+
+            foreach (var atm in atms)
+            {
+                ATMs.Add(atm);
+            }
+
+            // Update supervisor profile ATMs if needed
+            if (SupervisorProfile != null)
+            {
+                SupervisorProfile.ATMs = new ObservableCollection<ATMInfo>(atms);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading ATMs: {ex.Message}");
         }
     }
 
@@ -137,8 +148,67 @@ public class SupervisorProfileViewModel : ViewModelBase
 
     private void AddATM()
     {
-        // Navigate to Add ATM view
-        NavigationHelper.NavigateTo<ATMCollectionView>();
+        NavigationHelper.NavigateTo<AddATMView>();
+    }
+
+    private void ExecuteEditATM(ATMInfo atm)
+    {
+        if (atm != null)
+        {
+            NavigationHelper.NavigateTo<AddATMView>();
+        }
+    }
+
+    private bool CanExecuteEditATM(ATMInfo atm)
+    {
+        return atm != null;
+    }
+
+    private async void ExecuteDeleteATM(ATMInfo atm)
+    {
+        if (atm != null)
+        {
+            var result = System.Windows.MessageBox.Show(
+                $"Are you sure you want to delete ATM {atm.ATMNumber}?",
+                "Confirm Delete",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Question);
+
+            if (result == System.Windows.MessageBoxResult.Yes)
+            {
+                var success = await _atmDataService.DeleteATMAsync(atm.ATMNumber);
+                if (success)
+                {
+                    ATMs.Remove(atm);
+                    if (SupervisorProfile?.ATMs != null)
+                    {
+                        var profileAtm = SupervisorProfile.ATMs.FirstOrDefault(a => a.ATMNumber == atm.ATMNumber);
+                        if (profileAtm != null)
+                        {
+                            SupervisorProfile.ATMs.Remove(profileAtm);
+                        }
+                    }
+
+                    if (SelectedATM == atm)
+                    {
+                        SelectedATM = null;
+                    }
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(
+                        "Failed to delete ATM. Please try again.",
+                        "Error",
+                        System.Windows.MessageBoxButton.OK,
+                        System.Windows.MessageBoxImage.Error);
+                }
+            }
+        }
+    }
+
+    private bool CanExecuteDeleteATM(ATMInfo atm)
+    {
+        return atm != null;
     }
 
     private async Task RefreshDataAsync()

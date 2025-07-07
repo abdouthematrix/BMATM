@@ -4,8 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="600"
-    d:DesignWidth="800"
     mc:Ignorable="d">
 
     <Grid>
@@ -76,7 +74,7 @@
                 Grid.Row="1"
                 Padding="20"
                 VerticalScrollBarVisibility="Auto">
-                <StackPanel MaxWidth="800" HorizontalAlignment="Center">
+                <StackPanel MaxWidth="1200" HorizontalAlignment="Center">
 
                     <!--  Loading Indicator  -->
                     <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -126,197 +124,371 @@
                                     FontSize="22"
                                     FontWeight="Bold"
                                     Foreground="{DynamicResource PrimaryColor}"
-                                    Text="{Binding FullName}" />
+                                    Text="{Binding SupervisorProfile.User.DisplayName}" />
                             </StackPanel>
                         </Border>
 
-                        <!--  User Information Card  -->
-                        <Border
-                            Margin="0,0,0,20"
-                            Padding="25"
-                            Background="White"
-                            BorderBrush="{DynamicResource BorderColor}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                        <!--  Two Column Layout  -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="400" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                                <!--  Section Header  -->
-                                <TextBlock
-                                    Grid.Row="0"
+                            <!--  Left Column: User Information  -->
+                            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                <!--  User Information Card  -->
+                                <Border
                                     Margin="0,0,0,20"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
-                                    Foreground="{DynamicResource PrimaryColor}"
-                                    Text="{DynamicResource UserInformation}" />
+                                    Padding="25"
+                                    Background="White"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-                                <!--  User Details Grid  -->
-                                <Grid Grid.Row="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!--  Full Name  -->
-                                    <TextBlock
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Margin="0,0,0,15"
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextColor}"
-                                        Text="{DynamicResource FullName}" />
-                                    <TextBlock
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="0,0,0,15"
-                                        FontSize="14"
-                                        Text="{Binding FullName}" />
-
-                                    <!--  Username  -->
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Margin="0,0,0,15"
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextColor}"
-                                        Text="{DynamicResource Username}" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="0,0,0,15"
-                                        FontSize="14"
-                                        Text="{Binding Username}" />
-
-                                    <!--  Branch Number  -->
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="0"
-                                        Margin="0,0,0,15"
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextColor}"
-                                        Text="{DynamicResource BranchNumber}" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        Margin="0,0,0,15"
-                                        FontSize="14"
-                                        Text="{Binding BranchNumber}" />
-
-                                    <!--  Branch Name  -->
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="0"
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextColor}"
-                                        Text="{DynamicResource BranchName}" />
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="1"
-                                        FontSize="14"
-                                        Text="{Binding BranchName}" />
-                                </Grid>
-                            </Grid>
-                        </Border>
-
-                        <!--  ATM Collection Card  -->
-                        <Border
-                            Padding="25"
-                            Background="White"
-                            BorderBrush="{DynamicResource BorderColor}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <StackPanel>
-                                <TextBlock
-                                    Margin="0,0,0,20"
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
-                                    Foreground="{DynamicResource PrimaryColor}"
-                                    Text="{DynamicResource ATMCollection}" />
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <!--  Section Header  -->
                                         <TextBlock
-                                            FontSize="14"
-                                            Foreground="{DynamicResource TextColor}"
-                                            Text="{DynamicResource ATMCount}" />
-                                        <TextBlock
-                                            Margin="0,5,0,0"
-                                            FontSize="24"
-                                            FontWeight="Bold"
+                                            Grid.Row="0"
+                                            Margin="0,0,0,20"
+                                            FontSize="18"
+                                            FontWeight="SemiBold"
                                             Foreground="{DynamicResource PrimaryColor}"
-                                            Text="{Binding AtmCountDisplay}" />
+                                            Text="{DynamicResource UserInformation}" />
+
+                                        <!--  User Details Grid  -->
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="120" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!--  Display Name  -->
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Margin="0,0,0,15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource DisplayName}" />
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,15"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.DisplayName}" />
+
+                                            <!--  Username  -->
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Margin="0,0,0,15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource Username}" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,15"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.Username}" />
+
+                                            <!--  Email  -->
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Margin="0,0,0,15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource Email}" />
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,15"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.Email}" />
+
+                                            <!--  Department  -->
+                                            <TextBlock
+                                                Grid.Row="3"
+                                                Grid.Column="0"
+                                                Margin="0,0,0,15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource Department}" />
+                                            <TextBlock
+                                                Grid.Row="3"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,15"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.Department}" />
+
+                                            <!--  Branch Number  -->
+                                            <TextBlock
+                                                Grid.Row="4"
+                                                Grid.Column="0"
+                                                Margin="0,0,0,15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource BranchNumber}" />
+                                            <TextBlock
+                                                Grid.Row="4"
+                                                Grid.Column="1"
+                                                Margin="0,0,0,15"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.BranchNumber}" />
+
+                                            <!--  Branch Name  -->
+                                            <TextBlock
+                                                Grid.Row="5"
+                                                Grid.Column="0"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextColor}"
+                                                Text="{DynamicResource BranchName}" />
+                                            <TextBlock
+                                                Grid.Row="5"
+                                                Grid.Column="1"
+                                                FontSize="14"
+                                                Text="{Binding SupervisorProfile.User.BranchName}" />
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <!--  ATM Summary Card  -->
+                                <Border
+                                    Padding="25"
+                                    Background="White"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <StackPanel>
+                                        <TextBlock
+                                            Margin="0,0,0,20"
+                                            FontSize="18"
+                                            FontWeight="SemiBold"
+                                            Foreground="{DynamicResource PrimaryColor}"
+                                            Text="{DynamicResource ATMSummary}" />
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                <TextBlock
+                                                    FontSize="14"
+                                                    Foreground="{DynamicResource TextColor}"
+                                                    Text="{DynamicResource ATMCount}" />
+                                                <TextBlock
+                                                    Margin="0,5,0,0"
+                                                    FontSize="24"
+                                                    FontWeight="Bold"
+                                                    Foreground="{DynamicResource PrimaryColor}"
+                                                    Text="{Binding ATMs.Count,Mode=OneWay}" />
+                                            </StackPanel>
+
+                                            <Button
+                                                Grid.Column="1"
+                                                Padding="15,10"
+                                                Command="{Binding AddATMCommand}"
+                                                Content="{DynamicResource AddATM}"
+                                                FontSize="14"
+                                                Style="{DynamicResource PrimaryButtonStyle}" />
+                                        </Grid>
                                     </StackPanel>
+                                </Border>
 
-                                    <Button
-                                        Grid.Column="1"
-                                        Padding="15,10"
-                                        Command="{Binding AddATMCommand}"
-                                        Content="{DynamicResource AddATM}"
-                                        FontSize="14"
-                                        Style="{DynamicResource PrimaryButtonStyle}" />
-                                </Grid>
-
-                                <!--  ATM List Placeholder  -->
+                                <!--  Last Login Info  -->
                                 <Border
                                     Margin="0,20,0,0"
-                                    Padding="20"
+                                    Padding="15"
                                     Background="{DynamicResource BackgroundColor}"
                                     BorderBrush="{DynamicResource BorderColor}"
                                     BorderThickness="1"
                                     CornerRadius="4">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="{DynamicResource NoATMsMessage}"
-                                        TextAlignment="Center" />
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            Margin="0,0,10,0"
+                                            FontWeight="SemiBold"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="{DynamicResource LastLogin}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            FontSize="14"
+                                            Text="{Binding SupervisorProfile.User.LastLogin, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" />
+                                    </Grid>
                                 </Border>
                             </StackPanel>
-                        </Border>
 
-                        <!--  Last Login Info  -->
-                        <Border
-                            Margin="0,20,0,0"
-                            Padding="15"
-                            Background="{DynamicResource BackgroundColor}"
-                            BorderBrush="{DynamicResource BorderColor}"
-                            BorderThickness="1"
-                            CornerRadius="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                            <!--  Right Column: ATM Collection  -->
+                            <StackPanel Grid.Column="1">
+                                <!--  ATM Collection Header  -->
+                                <Border
+                                    Margin="0,0,0,20"
+                                    Padding="20"
+                                    Background="White"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                <TextBlock
-                                    Grid.Column="0"
-                                    Margin="0,0,10,0"
-                                    FontWeight="SemiBold"
-                                    Foreground="{DynamicResource TextColor}"
-                                    Text="{DynamicResource LastLogin}" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    FontSize="14"
-                                    Text="{Binding LastLoginDisplay}" />
-                            </Grid>
-                        </Border>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontWeight="SemiBold"
+                                            Foreground="{DynamicResource PrimaryColor}"
+                                            Text="{DynamicResource ATMCollection}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            Foreground="{DynamicResource TextColor}">
+                                            <Run Text="{DynamicResource Total}" />
+                                            <Run FontWeight="Bold" Text="{Binding ATMs.Count,Mode=OneWay}" />
+                                            <Run Text="{DynamicResource ATMs}" />
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+
+                                <!--  ATM Cards  -->
+                                <Border
+                                    Background="White"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+
+                                    <ScrollViewer MaxHeight="600" VerticalScrollBarVisibility="Auto">
+                                        <Grid>
+
+
+                                            <!--  Empty State  -->
+                                            <StackPanel
+                                            Margin="40"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Visibility="{Binding ATMs.Count,Mode=OneWay, Converter={StaticResource CountToVisibilityConverter}}">
+                                                <TextBlock
+                                                Margin="0,0,0,20"
+                                                HorizontalAlignment="Center"
+                                                FontSize="16"
+                                                FontStyle="Italic"
+                                                Foreground="Gray"
+                                                Text="{DynamicResource NoATMsMessage}"
+                                                TextAlignment="Center" />
+                                                <Button
+                                                Padding="20,10"
+                                                Command="{Binding AddATMCommand}"
+                                                Content="{DynamicResource AddFirstATM}"
+                                                Style="{DynamicResource PrimaryButtonStyle}" />
+                                            </StackPanel>
+
+                                            <!--  ATM List  -->
+                                            <ItemsControl ItemsSource="{Binding ATMs}" Visibility="{Binding ATMs.Count,Mode=OneWay, Converter={StaticResource InverseCountToVisibilityConverter}}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border
+                                                        Margin="15,10,15,10"
+                                                        Background="#FAFAFA"
+                                                        BorderBrush="{DynamicResource BorderColor}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6">
+                                                            <Grid Margin="20,15">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="80" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <!--  ATM Icon  -->
+                                                                <Image
+                                                                Grid.Column="0"
+                                                                Width="60"
+                                                                Height="60"
+                                                                Source="{Binding ATMType, Converter={StaticResource ATMTypeToImageConverter}}"
+                                                                Stretch="Uniform" />
+
+                                                                <!--  ATM Details  -->
+                                                                <StackPanel Grid.Column="1" Margin="15,0,0,0">
+                                                                    <TextBlock
+                                                                    FontSize="16"
+                                                                    FontWeight="Bold"
+                                                                    Text="{Binding ATMNumber}" />
+                                                                    <TextBlock
+                                                                    Margin="0,2,0,0"
+                                                                    FontSize="13"
+                                                                    Foreground="Gray"
+                                                                    Text="{Binding ATMType, Converter={StaticResource ATMTypeToDisplayNameConverter}}" />
+                                                                    <TextBlock
+                                                                    Margin="0,2,0,0"
+                                                                    FontSize="13"
+                                                                    Text="{Binding Location}" />
+                                                                    <TextBlock
+                                                                    Margin="0,2,0,0"
+                                                                    FontSize="13"
+                                                                    Text="{Binding BranchName}" />
+                                                                    <TextBlock
+                                                                    Margin="0,5,0,0"
+                                                                    FontSize="12"
+                                                                    FontWeight="SemiBold"
+                                                                    Foreground="{Binding IsActive, Converter={StaticResource BooleanToStatusColorConverter}}"
+                                                                    Text="{Binding IsActive, Converter={StaticResource BooleanToStatusConverter}}" />
+                                                                </StackPanel>
+
+                                                                <!--  Action Buttons  -->
+                                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                                    <Button
+                                                                    Width="60"
+                                                                    Height="30"
+                                                                    Margin="0,0,5,0"
+                                                                    Command="{Binding DataContext.EditATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Content="{DynamicResource Edit}"
+                                                                    FontSize="11"
+                                                                    Style="{DynamicResource SecondaryButtonStyle}" />
+                                                                    <Button
+                                                                    Width="60"
+                                                                    Height="30"
+                                                                    Command="{Binding DataContext.DeleteATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Content="{DynamicResource Delete}"
+                                                                    FontSize="11"
+                                                                    Style="{DynamicResource DangerButtonStyle}" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

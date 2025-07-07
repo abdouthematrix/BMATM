@@ -357,7 +357,7 @@ public class AddATMViewModel : ViewModelBase
 
             if (success)
             {
-                NavigationHelper.NavigateTo<ATMCollectionView>();
+                NavigationHelper.NavigateTo<SupervisorProfileView>();
             }
             else
             {
@@ -385,6 +385,6 @@ public class AddATMViewModel : ViewModelBase
 
     private void ExecuteCancel()
     {
-        NavigationHelper.NavigateTo<ATMCollectionView>();
+        NavigationHelper.NavigateTo<SupervisorProfileView>();
     }
 }

@@ -1,17 +1,14 @@
-﻿using System.Configuration;
-
-namespace BMATM.Services;
+﻿namespace BMATM.Services;
 
 public class LocalUserDataService : IUserDataService
 {
     private readonly string _dataDirectory;
     private readonly string _profilesFilePath;
     private readonly JsonSerializerOptions _jsonOptions;
-
     public LocalUserDataService()
     {
         var path = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
-        _dataDirectory = Path.GetDirectoryName(path); //Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BMATM");
+        _dataDirectory = Path.GetDirectoryName(path);
         _profilesFilePath = Path.Combine(_dataDirectory, "supervisor_profiles.json");
 
         _jsonOptions = new JsonSerializerOptions
@@ -36,7 +33,7 @@ public class LocalUserDataService : IUserDataService
         try
         {
             var profiles = await LoadProfilesAsync();
-            return profiles.FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return profiles.FirstOrDefault(p => p.User?.Username?.Equals(username, StringComparison.OrdinalIgnoreCase) == true);
         }
         catch
         {
@@ -51,7 +48,7 @@ public class LocalUserDataService : IUserDataService
             var profiles = await LoadProfilesAsync();
 
             // Check if profile already exists
-            var existingProfileIndex = profiles.FindIndex(p => p.Username.Equals(profile.Username, StringComparison.OrdinalIgnoreCase));
+            var existingProfileIndex = profiles.FindIndex(p => p.User?.Username?.Equals(profile.User?.Username, StringComparison.OrdinalIgnoreCase) == true);
 
             if (existingProfileIndex >= 0)
             {
@@ -83,7 +80,7 @@ public class LocalUserDataService : IUserDataService
         try
         {
             var profiles = await LoadProfilesAsync();
-            var profileToRemove = profiles.FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            var profileToRemove = profiles.FirstOrDefault(p => p.User?.Username?.Equals(username, StringComparison.OrdinalIgnoreCase) == true);
 
             if (profileToRemove != null)
             {
@@ -117,51 +114,19 @@ public class LocalUserDataService : IUserDataService
         try
         {
             var profiles = await LoadProfilesAsync();
-            return profiles.Any(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return profiles.Any(p => p.User?.Username?.Equals(username, StringComparison.OrdinalIgnoreCase) == true);
         }
         catch
         {
             return false;
         }
     }
-
-    public async Task<int> GetAtmCountForSupervisorAsync(string username)
-    {
-        try
-        {
-            var profile = await GetSupervisorProfileAsync(username);
-            return profile?.AtmCollectionCount ?? 0;
-        }
-        catch
-        {
-            return 0;
-        }
-    }
-
-    public async Task<bool> UpdateAtmCountAsync(string username, int newCount)
-    {
-        try
-        {
-            var profile = await GetSupervisorProfileAsync(username);
-            if (profile != null)
-            {
-                profile.AtmCollectionCount = newCount;
-                return await SaveSupervisorProfileAsync(profile);
-            }
-            return false;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public async Task<DateTime?> GetLastLoginDateAsync(string username)
     {
         try
         {
             var profile = await GetSupervisorProfileAsync(username);
-            return profile?.LastLoginDate;
+            return profile?.User?.LastLogin;
         }
         catch
         {
@@ -174,9 +139,9 @@ public class LocalUserDataService : IUserDataService
         try
         {
             var profile = await GetSupervisorProfileAsync(username);
-            if (profile != null)
+            if (profile?.User != null)
             {
-                profile.LastLoginDate = loginDate;
+                profile.User.LastLogin = loginDate;
                 return await SaveSupervisorProfileAsync(profile);
             }
             return false;
@@ -186,7 +151,7 @@ public class LocalUserDataService : IUserDataService
             return false;
         }
     }
-          
+
     public async Task<bool> ClearAllDataAsync()
     {
         try

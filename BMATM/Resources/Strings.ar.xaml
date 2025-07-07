@@ -29,7 +29,9 @@
     <sys:String x:Key="SupervisorProfile">ملف المشرف</sys:String>
     <sys:String x:Key="Welcome">مرحباً</sys:String>
     <sys:String x:Key="UserInformation">معلومات المستخدم</sys:String>
-    <sys:String x:Key="FullName">الاسم الكامل</sys:String>
+    <sys:String x:Key="DisplayName">الاسم الكامل</sys:String>
+    <sys:String x:Key="Email">البريد الإلكتروني</sys:String>
+    <sys:String x:Key="Department">القسم</sys:String>
     <sys:String x:Key="BranchNumber">رقم الفرع</sys:String>
     <sys:String x:Key="BranchName">اسم الفرع</sys:String>
     <sys:String x:Key="ATMCollection">مجموعة الصرافات</sys:String>
@@ -42,6 +44,13 @@
     <sys:String x:Key="Loading">جاري التحميل...</sys:String>
 
     <!--  ATM Collection View  -->
+    <!-- ATM Summary Section -->
+    <sys:String x:Key="ATMSummary">ملخص الصرافات</sys:String>
+
+    <!-- ATM Collection Display -->
+    <sys:String x:Key="Total">المجموع</sys:String>
+    <sys:String x:Key="ATMs">صرافات</sys:String>
+    <sys:String x:Key="AddFirstATM">إضافة أول صراف</sys:String>
     <sys:String x:Key="ATMCollectionTitle">مجموعة الصرافات</sys:String>
     <sys:String x:Key="RefreshButtonText">تحديث</sys:String>
     <sys:String x:Key="AddATMButtonText">إضافة صراف</sys:String>

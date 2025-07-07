@@ -17,8 +17,8 @@ public class MockAuthenticationService : IAuthenticationService
                 DisplayName = "Abdelrahman Hassan",
                 Email = "abdelrahmanhas@banquemisr.com",
                 Role = UserRole.Supervisor,
-                Department = "Branchs",
-                BranchCode = "707",
+                Department = "West Cairo Region",
+                BranchNumber = "707",
                 BranchName = "Sheraton Cairo Branch"
             },
             new User
@@ -28,7 +28,7 @@ public class MockAuthenticationService : IAuthenticationService
                 Email = "admin@bank.com",
                 Role = UserRole.Administrator,
                 Department = "IT",
-                BranchCode = "001",
+                BranchNumber = "001",
                 BranchName = "Main Branch"
             },
             new User
@@ -38,7 +38,7 @@ public class MockAuthenticationService : IAuthenticationService
                 Email = "supervisor@bank.com",
                 Role = UserRole.Supervisor,
                 Department = "Operations",
-                BranchCode = "002",
+                BranchNumber = "002",
                 BranchName = "Downtown Branch"
             },
             new User
@@ -48,7 +48,7 @@ public class MockAuthenticationService : IAuthenticationService
                 Email = "operator@bank.com",
                 Role = UserRole.Operator,
                 Department = "Operations",
-                BranchCode = "003",
+                BranchNumber = "003",
                 BranchName = "Mall Branch"
             }
         };

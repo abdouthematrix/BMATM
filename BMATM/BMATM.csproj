@@ -120,9 +120,6 @@
     <Compile Update="Views\AddATMView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ATMCollectionView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\LoginView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

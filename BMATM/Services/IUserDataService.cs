@@ -7,9 +7,7 @@ public interface IUserDataService
     Task<bool> UpdateSupervisorProfileAsync(SupervisorProfile profile);
     Task<bool> DeleteSupervisorProfileAsync(string username);
     Task<List<SupervisorProfile>> GetAllSupervisorProfilesAsync();
-    Task<bool> ProfileExistsAsync(string username);
-    Task<int> GetAtmCountForSupervisorAsync(string username);
-    Task<bool> UpdateAtmCountAsync(string username, int newCount);
+    Task<bool> ProfileExistsAsync(string username); 
     Task<DateTime?> GetLastLoginDateAsync(string username);
     Task<bool> UpdateLastLoginDateAsync(string username, DateTime loginDate);    
     Task<bool> ClearAllDataAsync();

@@ -29,7 +29,9 @@
     <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>
     <sys:String x:Key="Welcome">Welcome</sys:String>
     <sys:String x:Key="UserInformation">User Information</sys:String>
-    <sys:String x:Key="FullName">Full Name</sys:String>
+    <sys:String x:Key="DisplayName">Full Name</sys:String>
+    <sys:String x:Key="Email">Email Address</sys:String>
+    <sys:String x:Key="Department">Department</sys:String>
     <sys:String x:Key="BranchNumber">Branch Number</sys:String>
     <sys:String x:Key="BranchName">Branch Name</sys:String>
     <sys:String x:Key="ATMCollection">ATM Collection</sys:String>
@@ -42,6 +44,13 @@
     <sys:String x:Key="Loading">Loading...</sys:String>
 
     <!--  ATM Collection View  -->
+    <!-- ATM Summary Section -->
+    <sys:String x:Key="ATMSummary">ATM Summary</sys:String>
+
+    <!-- ATM Collection Display -->
+    <sys:String x:Key="Total">Total</sys:String>
+    <sys:String x:Key="ATMs">ATMs</sys:String>
+    <sys:String x:Key="AddFirstATM">Add First ATM</sys:String>
     <sys:String x:Key="ATMCollectionTitle">ATM Collection</sys:String>
     <sys:String x:Key="RefreshButtonText">Refresh</sys:String>
     <sys:String x:Key="AddATMButtonText">Add ATM</sys:String>
