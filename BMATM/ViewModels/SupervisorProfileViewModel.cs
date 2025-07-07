@@ -137,33 +137,12 @@ public class SupervisorProfileViewModel : ViewModelBase
 
     private void AddATM()
     {
-        // TODO: Navigate to Add ATM view
-        // This will be implemented in the next phase
-        System.Diagnostics.Debug.WriteLine("Add ATM functionality - to be implemented in next phase");
+        // Navigate to Add ATM view
+        NavigationHelper.NavigateTo<ATMCollectionView>();
     }
 
     private async Task RefreshDataAsync()
     {
         await LoadUserDataAsync();
-    }
-
-    public async Task IncrementAtmCountAsync()
-    {
-        if (SupervisorProfile != null)
-        {
-            SupervisorProfile.AtmCollectionCount++;
-            await _userDataService.UpdateSupervisorProfileAsync(SupervisorProfile);
-            UpdateAtmCountDisplay();
-        }
-    }
-
-    public async Task DecrementAtmCountAsync()
-    {
-        if (SupervisorProfile != null && SupervisorProfile.AtmCollectionCount > 0)
-        {
-            SupervisorProfile.AtmCollectionCount--;
-            await _userDataService.UpdateSupervisorProfileAsync(SupervisorProfile);
-            UpdateAtmCountDisplay();
-        }
     }
 }

@@ -6,10 +6,20 @@
     Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
-            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <!--  Value Converters  -->
+            <converters:ATMTypeToDisplayNameConverter x:Key="ATMTypeToDisplayNameConverter" />
+            <converters:ATMTypeToImageConverter x:Key="ATMTypeToImageConverter" />
+            <converters:BooleanToAddEditTitleConverter x:Key="BooleanToAddEditTitleConverter" />
+            <converters:BooleanToSavingTextConverter x:Key="BooleanToSavingTextConverter" />
+            <converters:BooleanToStatusColorConverter x:Key="BooleanToStatusColorConverter" />
+
+            <converters:BooleanToStatusConverter x:Key="BooleanToStatusConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Strings.en.xaml" />
                 <ResourceDictionary Source="Resources/Styles.xaml" />

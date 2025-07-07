@@ -23,11 +23,14 @@ public partial class App : Application
         // Register Services
         services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
         services.AddSingleton<IUserDataService, LocalUserDataService>();
+        services.AddSingleton<IATMDataService, LocalATMDataService>();
         // ... more services
 
         // Register ViewModels        
         services.AddTransient<LoginViewModel>();
         services.AddTransient<SupervisorProfileViewModel>();
+        services.AddTransient<ATMCollectionViewModel>();
+        services.AddTransient<AddATMViewModel>();
 
         services.AddSingleton<MainWindowViewModel>();
         // ... more VMs
@@ -35,6 +38,8 @@ public partial class App : Application
         // Register Views        
         services.AddTransient<LoginView>();
         services.AddTransient<SupervisorProfileView>();
+        services.AddTransient<ATMCollectionView>();
+        services.AddTransient<AddATMView>();
 
         services.AddSingleton<MainWindow>();
         // ... more Views
