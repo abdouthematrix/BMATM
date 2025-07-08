@@ -1,5 +1,6 @@
 # BMATM
-<pre>```mermaidgraph TD
+```mermaid
+    graph TD
     %% User Journey Start
     Start([User Opens BMATM App]) --> Login{Login Screen}
     
@@ -147,11 +148,4 @@
     class CheckATMs,ATMActions,CalculationChoice,PrintOption decision
     class LoginCode,DashboardCode,ATMCode,DayCode,CalcCode,GLCode,ReportCode,DataCode,LangCode codeComponent
     class CalculateDispensed arabicProcess
-```</pre>
-GitHub will automatically render this as a diagram when viewing the file in the repository.
-📌 Notes:
-- No installation or configuration is needed—just commit the .md file with the Mermaid code.
-- Mermaid is supported in Markdown files, issues, pull requests, and discussions.
-- Some advanced Mermaid features (like tooltips or icons) may not render fully on GitHub.
-For more details, check out GitHub’s official diagram documentation or this freeCodeCamp guide.
-Would you like me to optimize your full diagram for GitHub rendering (e.g., trimming or splitting it for better readability)?
+```
