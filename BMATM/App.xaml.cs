@@ -20,10 +20,17 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        // Register Data
+        services.AddSingleton<DatabaseContext, DatabaseContext>();        
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<ISupervisorProfileRepository, SupervisorProfileRepository>();
+        services.AddSingleton<IATMRepository, ATMRepository>();
+        // ... more services
+
         // Register Services
-        services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
-        services.AddSingleton<IUserDataService, LocalUserDataService>();
-        services.AddSingleton<IATMDataService, LocalATMDataService>();
+        services.AddSingleton<IAuthenticationService, SQLiteAuthenticationService>();
+        services.AddSingleton<IUserDataService, SQLiteUserDataService>();
+        services.AddSingleton<IATMDataService, SQLiteATMDataService>();
         // ... more services
 
         // Register ViewModels        
@@ -73,9 +80,9 @@ public partial class App : Application
 
         // Remove any previous Localization dictionaries loaded
         int langDictId = -1;
-        for (int i = 0; i < Application.Current.Resources.MergedDictionaries.Count; i++)
+        for (int i = 0; i < Current.Resources.MergedDictionaries.Count; i++)
         {
-            var md = Application.Current.Resources.MergedDictionaries[i];
+            var md = Current.Resources.MergedDictionaries[i];
             // Make sure your Localization ResourceDictionarys have the ResourceDictionaryName
             // key and that it is set to a value starting with "Loc-".
             if (md.Contains("ResourceDictionaryName"))
@@ -90,19 +97,19 @@ public partial class App : Application
         if (langDictId == -1)
         {
             // Add in newly loaded Resource Dictionary
-            Application.Current.Resources.MergedDictionaries.Add(newLanguage);
+            Current.Resources.MergedDictionaries.Add(newLanguage);
         }
         else
         {
             // Replace the current langage dictionary with the new one
-            Application.Current.Resources.MergedDictionaries[langDictId] = newLanguage;
+            Current.Resources.MergedDictionaries[langDictId] = newLanguage;
         }
 
         // Set FlowDirection if present
         if (newLanguage["FlowDirection"] is FlowDirection flowDirection)
         {
-            if (Application.Current.MainWindow != null)
-                Application.Current.MainWindow.FlowDirection = flowDirection;
+            if (Current.MainWindow != null)
+                Current.MainWindow.FlowDirection = flowDirection;
         }
 
         Settings.Default.Language = languageCode;

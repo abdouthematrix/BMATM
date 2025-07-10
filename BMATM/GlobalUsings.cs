@@ -23,6 +23,9 @@ global using BMATM.Models;
 global using BMATM.Services;
 global using BMATM.Helpers;
 global using BMATM.Views;
+global using BMATM.Data;
+global using BMATM.Data.Repositories;
 
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Data.Sqlite;
