@@ -1,13 +1,20 @@
 ﻿namespace BMATM.ViewModels;
 public class SupervisorProfileViewModel : ViewModelBase
 {
-    private readonly IAuthenticationService _authenticationService;
-    private readonly IUserDataService _userDataService;
-    private readonly IATMDataService _atmDataService;
+    private readonly DatabaseInitializationManager database;   
     private SupervisorProfile? _supervisorProfile;
     private bool _isLoading;
     private ObservableCollection<ATMInfo> _atms;
     private ATMInfo _selectedATM;
+
+    private User? _user;
+
+    public User? CurrentUser
+    {
+        get => _user;
+        set => SetProperty(ref _user, value);
+    }
+    
 
     public SupervisorProfile? SupervisorProfile
     {
@@ -44,55 +51,45 @@ public class SupervisorProfileViewModel : ViewModelBase
     public ICommand DeleteATMCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public SupervisorProfileViewModel(
-        IAuthenticationService authenticationService,
-        IUserDataService userDataService,
-        IATMDataService atmDataService)
+    public SupervisorProfileViewModel(DatabaseInitializationManager DatabaseManager)
     {
-        _authenticationService = authenticationService;
-        _userDataService = userDataService;
-        _atmDataService = atmDataService;
+        database = DatabaseManager;
         _atms = new ObservableCollection<ATMInfo>();
 
         LogoutCommand = new RelayCommand(async () => await LogoutAsync());
         AddATMCommand = new RelayCommand(AddATM);
         EditATMCommand = new RelayCommand<ATMInfo>(ExecuteEditATM, CanExecuteEditATM);
         DeleteATMCommand = new RelayCommand<ATMInfo>(ExecuteDeleteATM, CanExecuteDeleteATM);
-        RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());
-
-        _ = LoadUserDataAsync();
+        RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());       
     }
+    
 
-    private async Task LoadUserDataAsync()
+    public async Task LoadUserDataAsync()
     {
         try
         {
             IsLoading = true;
-
-            // Load current user from authentication service
-            var currentUser = await _authenticationService.GetCurrentUserAsync();
-
-            if (currentUser != null)
+            if (CurrentUser != null)
             {
                 // Load or create supervisor profile
-                SupervisorProfile = await _userDataService.GetSupervisorProfileAsync(currentUser.Username);
+                SupervisorProfile = await database._profileService.GetProfileByUsernameAsync(CurrentUser.Username);
 
                 if (SupervisorProfile == null)
                 {
                     // Create new supervisor profile if it doesn't exist
                     SupervisorProfile = new SupervisorProfile
                     {
-                        User = currentUser,
+                        User = CurrentUser,
                         ATMs = new ObservableCollection<ATMInfo>()
                     };
 
-                    await _userDataService.SaveSupervisorProfileAsync(SupervisorProfile);
+                    await database._profileService.CreateProfileAsync(SupervisorProfile);
                 }
                 else
                 {
                     // Update last login date
                     SupervisorProfile.User.LastLogin = DateTime.Now;
-                    await _userDataService.UpdateSupervisorProfileAsync(SupervisorProfile);
+                    await database._profileService.UpdateProfileAsync(SupervisorProfile);
                 }
 
                 // Load ATMs
@@ -113,13 +110,15 @@ public class SupervisorProfileViewModel : ViewModelBase
     {
         try
         {
-            var atms = await _atmDataService.GetAllATMsAsync();
+            if (SupervisorProfile == null)
+                return;
+            
+            var atms = await database._atmService.GetATMsByUsernameAsync(SupervisorProfile?.User?.Username);
             ATMs.Clear();
 
-            foreach (var atm in atms)
-            {
+            foreach (var atm in atms)            
                 ATMs.Add(atm);
-            }
+            
 
             // Update supervisor profile ATMs if needed
             if (SupervisorProfile != null)
@@ -137,7 +136,7 @@ public class SupervisorProfileViewModel : ViewModelBase
     {
         try
         {
-            await _authenticationService.LogoutAsync();
+            CurrentUser = null;
             NavigationHelper.NavigateTo<LoginView>();
         }
         catch (Exception ex)
@@ -148,14 +147,14 @@ public class SupervisorProfileViewModel : ViewModelBase
 
     private void AddATM()
     {
-        NavigationHelper.NavigateTo<AddATMView>();
+        NavigationHelper.NavigateTo<AddATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new (SupervisorProfile, null));
     }
 
     private void ExecuteEditATM(ATMInfo atm)
     {
         if (atm != null)
         {
-            NavigationHelper.NavigateTo<AddATMView>();
+            NavigationHelper.NavigateTo<AddATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new(SupervisorProfile, atm));
         }
     }
 
@@ -176,7 +175,7 @@ public class SupervisorProfileViewModel : ViewModelBase
 
             if (result == System.Windows.MessageBoxResult.Yes)
             {
-                var success = await _atmDataService.DeleteATMAsync(atm.ATMNumber);
+                var success = await database._atmService.DeactivateATMAsync(atm.ATMNumber);
                 if (success)
                 {
                     ATMs.Remove(atm);
@@ -210,7 +209,6 @@ public class SupervisorProfileViewModel : ViewModelBase
     {
         return atm != null;
     }
-
     private async Task RefreshDataAsync()
     {
         await LoadUserDataAsync();

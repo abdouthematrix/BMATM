@@ -24,6 +24,16 @@
     <sys:String x:Key="DomainUsername">Domain Username</sys:String>
     <sys:String x:Key="RememberMe">Remember me</sys:String>
 
+    <!--  Authentication Error Messages  -->
+    <sys:String x:Key="AuthUsernameRequired">Username is required</sys:String>
+    <sys:String x:Key="AuthPasswordRequired">Password is required</sys:String>
+    <sys:String x:Key="AuthAccountLocked">Account is locked due to too many failed attempts. Try again in {0} minutes.</sys:String>
+    <sys:String x:Key="AuthInvalidCredentials">Invalid username or password</sys:String>
+    <sys:String x:Key="AuthUserNotFound">Invalid username or password</sys:String>
+    <sys:String x:Key="AuthUserInactive">User account is disabled</sys:String>
+    <sys:String x:Key="AuthDatabaseError">An error occurred during authentication</sys:String>
+    <sys:String x:Key="AuthAttemptsRemaining">{0} attempts remaining.</sys:String>
+
     <!--  Supervisor Profile Screen  -->
     <sys:String x:Key="Name">Name</sys:String>
     <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>
@@ -44,10 +54,10 @@
     <sys:String x:Key="Loading">Loading...</sys:String>
 
     <!--  ATM Collection View  -->
-    <!-- ATM Summary Section -->
+    <!--  ATM Summary Section  -->
     <sys:String x:Key="ATMSummary">ATM Summary</sys:String>
 
-    <!-- ATM Collection Display -->
+    <!--  ATM Collection Display  -->
     <sys:String x:Key="Total">Total</sys:String>
     <sys:String x:Key="ATMs">ATMs</sys:String>
     <sys:String x:Key="AddFirstATM">Add First ATM</sys:String>

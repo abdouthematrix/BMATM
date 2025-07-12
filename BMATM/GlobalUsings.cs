@@ -15,6 +15,8 @@ global using System.Text.Json;
 global using System.Collections.ObjectModel;
 global using System.Windows.Media;
 global using System.Configuration;
+global using System.Text;
+global using System.Security.Cryptography;
 
 global using BMATM.Properties;
 global using BMATM.ViewModels;
@@ -24,7 +26,6 @@ global using BMATM.Services;
 global using BMATM.Helpers;
 global using BMATM.Views;
 global using BMATM.Data;
-global using BMATM.Data.Repositories;
 
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.DependencyInjection;

@@ -15,7 +15,7 @@
 
         <Border
             Grid.Row="1"
-            MaxWidth="400"
+            MaxWidth="500"
             Margin="20"
             Background="White"
             BorderBrush="{DynamicResource BorderColor}"

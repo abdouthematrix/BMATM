@@ -1,37 +1,24 @@
 ﻿namespace BMATM.ViewModels;
 
-public class AddATMViewModel : ViewModelBase
+public class ATMViewModel : ViewModelBase
 {
-    private readonly IATMDataService _atmDataService;
-    private ATMInfo _atmInfo;
+    private readonly DatabaseInitializationManager database;    
     private bool _isEditMode;
-    private bool _isSaving;
-    private string _originalATMNumber;
-
+    private bool _isSaving;   
     // Form fields
     private string _atmNumber;
     private ATMType _selectedATMType;
     private string _glAccount;
     private string _branchCode;
     private string _branchName;
-    private string _location;
     private int _cassette1Denomination;
     private int _cassette2Denomination;
     private int _cassette3Denomination;
-    private int _cassette4Denomination;
-    private decimal _cassette1Balance;
-    private decimal _cassette2Balance;
-    private decimal _cassette3Balance;
-    private decimal _cassette4Balance;
-    private string _ipAddress;
-    private bool _isActive;
-    private DateTime _installationDate;
-    private DateTime _lastMaintenanceDate;
-    private string _notes;
-
-    public AddATMViewModel(IATMDataService atmDataService)
+    private int _cassette4Denomination; 
+    private bool _isActive; 
+    public ATMViewModel(DatabaseInitializationManager DatabaseManager)
     {
-        _atmDataService = atmDataService;
+        database = DatabaseManager;
 
         SaveCommand = new RelayCommand(async () => await ExecuteSaveAsync(), CanExecuteSave);
         CancelCommand = new RelayCommand(ExecuteCancel);
@@ -39,12 +26,21 @@ public class AddATMViewModel : ViewModelBase
         InitializeDefaults();
     }
 
-    public AddATMViewModel(IATMDataService atmDataService, ATMInfo atmToEdit) : this(atmDataService)
+    public void LoadATMData(ATMInfo atm)
     {
-        _isEditMode = true;
-        _originalATMNumber = atmToEdit.ATMNumber;
-        LoadATMData(atmToEdit);
+        ATMNumber = atm.ATMNumber;
+        SelectedATMType = atm.ATMType;
+        GLAccount = atm.GLAccount;
+        BranchCode = atm.BranchCode;
+        BranchName = atm.BranchName;
+        Cassette1Denomination = atm.Cassette1Denomination;
+        Cassette2Denomination = atm.Cassette2Denomination;
+        Cassette3Denomination = atm.Cassette3Denomination;
+        Cassette4Denomination = atm.Cassette4Denomination;      
+        IsActive = atm.IsActive;        
     }
+
+    public SupervisorProfile SupervisorProfile;
 
     public bool IsEditMode
     {
@@ -121,16 +117,6 @@ public class AddATMViewModel : ViewModelBase
         }
     }
 
-    public string Location
-    {
-        get => _location;
-        set
-        {
-            _location = value;
-            OnPropertyChanged();
-        }
-    }
-
     public int Cassette1Denomination
     {
         get => _cassette1Denomination;
@@ -171,56 +157,6 @@ public class AddATMViewModel : ViewModelBase
         }
     }
 
-    public decimal Cassette1Balance
-    {
-        get => _cassette1Balance;
-        set
-        {
-            _cassette1Balance = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public decimal Cassette2Balance
-    {
-        get => _cassette2Balance;
-        set
-        {
-            _cassette2Balance = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public decimal Cassette3Balance
-    {
-        get => _cassette3Balance;
-        set
-        {
-            _cassette3Balance = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public decimal Cassette4Balance
-    {
-        get => _cassette4Balance;
-        set
-        {
-            _cassette4Balance = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string IPAddress
-    {
-        get => _ipAddress;
-        set
-        {
-            _ipAddress = value;
-            OnPropertyChanged();
-        }
-    }
-
     public bool IsActive
     {
         get => _isActive;
@@ -230,44 +166,10 @@ public class AddATMViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
-
-    public DateTime InstallationDate
-    {
-        get => _installationDate;
-        set
-        {
-            _installationDate = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public DateTime LastMaintenanceDate
-    {
-        get => _lastMaintenanceDate;
-        set
-        {
-            _lastMaintenanceDate = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string Notes
-    {
-        get => _notes;
-        set
-        {
-            _notes = value;
-            OnPropertyChanged();
-        }
-    }
-
     public List<ATMType> ATMTypes => Enum.GetValues(typeof(ATMType)).Cast<ATMType>().ToList();
-
-    public List<int> CassetteDenominations => new List<int> { 200 , 100 ,50 ,20,10,5};
-
+    public List<int> CassetteDenominations => new List<int> { 200 , 100 ,50 ,20, 10, 5};
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
-
     private void InitializeDefaults()
     {
         SelectedATMType = ATMType.NCR;
@@ -276,33 +178,7 @@ public class AddATMViewModel : ViewModelBase
         Cassette3Denomination = 100;
         Cassette4Denomination = 20;
         IsActive = true;
-        InstallationDate = DateTime.Now;
-        LastMaintenanceDate = DateTime.Now;
     }
-
-    private void LoadATMData(ATMInfo atm)
-    {
-        ATMNumber = atm.ATMNumber;
-        SelectedATMType = atm.ATMType;
-        GLAccount = atm.GLAccount;
-        BranchCode = atm.BranchCode;
-        BranchName = atm.BranchName;
-        Location = atm.Location;
-        Cassette1Denomination = atm.Cassette1Denomination;
-        Cassette2Denomination = atm.Cassette2Denomination;
-        Cassette3Denomination = atm.Cassette3Denomination;
-        Cassette4Denomination = atm.Cassette4Denomination;
-        Cassette1Balance = atm.Cassette1Balance;
-        Cassette2Balance = atm.Cassette2Balance;
-        Cassette3Balance = atm.Cassette3Balance;
-        Cassette4Balance = atm.Cassette4Balance;
-        IPAddress = atm.IPAddress;
-        IsActive = atm.IsActive;
-        InstallationDate = atm.InstallationDate;
-        LastMaintenanceDate = atm.LastMaintenanceDate;
-        Notes = atm.Notes;
-    }
-
     private async Task ExecuteSaveAsync()
     {
         if (!CanExecuteSave())
@@ -318,31 +194,23 @@ public class AddATMViewModel : ViewModelBase
                 GLAccount = GLAccount?.Trim(),
                 BranchCode = BranchCode?.Trim(),
                 BranchName = BranchName?.Trim(),
-                Location = Location?.Trim(),
                 Cassette1Denomination = Cassette1Denomination,
                 Cassette2Denomination = Cassette2Denomination,
                 Cassette3Denomination = Cassette3Denomination,
-                Cassette4Denomination = Cassette4Denomination,
-                Cassette1Balance = Cassette1Balance,
-                Cassette2Balance = Cassette2Balance,
-                Cassette3Balance = Cassette3Balance,
-                Cassette4Balance = Cassette4Balance,
-                IPAddress = IPAddress?.Trim(),
+                Cassette4Denomination = Cassette4Denomination,               
                 IsActive = IsActive,
-                InstallationDate = InstallationDate,
-                LastMaintenanceDate = LastMaintenanceDate,
-                Notes = Notes?.Trim()
+                Username = SupervisorProfile.User.Username,
             };
 
             bool success;
             if (IsEditMode)
             {
-                success = await _atmDataService.UpdateATMAsync(atm);
+                success = await database._atmService.UpdateATMAsync(atm);
             }
             else
             {
                 // Check if ATM number already exists
-                if (await _atmDataService.ATMExistsAsync(atm.ATMNumber))
+                if (await database._atmService.GetATMByNumberAsync(atm.ATMNumber) != null)
                 {
                     System.Windows.MessageBox.Show(
                         "ATM number already exists. Please use a different number.",
@@ -352,12 +220,13 @@ public class AddATMViewModel : ViewModelBase
                     return;
                 }
 
-                success = await _atmDataService.AddATMAsync(atm);
+                success = await database._atmService.CreateATMAsync(atm);
             }
 
             if (success)
             {
-                NavigationHelper.NavigateTo<SupervisorProfileView>();
+                // Navigate to supervisor profile or main dashboard
+                NavigationHelper.NavigateTo<SupervisorProfileView, User>(SupervisorProfile.User);
             }
             else
             {
@@ -373,7 +242,6 @@ public class AddATMViewModel : ViewModelBase
             IsSaving = false;
         }
     }
-
     private bool CanExecuteSave()
     {
         return !IsSaving &&
@@ -382,9 +250,9 @@ public class AddATMViewModel : ViewModelBase
                !string.IsNullOrWhiteSpace(BranchCode) &&
                !string.IsNullOrWhiteSpace(BranchName);
     }
-
     private void ExecuteCancel()
     {
-        NavigationHelper.NavigateTo<SupervisorProfileView>();
+        // Navigate to supervisor profile or main dashboard
+        NavigationHelper.NavigateTo<SupervisorProfileView, User>(SupervisorProfile.User);
     }
 }

@@ -29,13 +29,13 @@ public class User : ViewModelBase
         set => SetProperty(ref _department, value);
     }
 
-    private string _branchNumber = string.Empty;
-    private string _branchName = string.Empty;
+    private string _branchNumber = string.Empty;    
     public string BranchNumber
     {
         get => _branchNumber;
         set => SetProperty(ref _branchNumber, value);
     }
+    private string _branchName = string.Empty;
     public string BranchName
     {
         get => _branchName;

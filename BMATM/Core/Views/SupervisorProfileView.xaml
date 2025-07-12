@@ -10,15 +10,17 @@
         <!--  Company Logo Background  -->
         <Grid.Background>
             <ImageBrush
-                AlignmentX="Center"
                 AlignmentY="Center"
                 ImageSource="/Resources/Images/CompanyLogo.png"
-                Opacity="0.1"
-                Stretch="UniformToFill" />
+                Opacity="0.75"
+                Stretch="Uniform"
+                TileMode="Tile"
+                Viewport="0,0,100,100"
+                ViewportUnits="Absolute" />
         </Grid.Background>
 
         <!--  Overlay for better readability  -->
-        <Grid Background="#F8F9FA" Opacity="0.95" />
+        <Grid Background="#F8F9FA" Opacity="0.75" />
 
         <Grid>
             <Grid.RowDefinitions>
@@ -74,7 +76,7 @@
                 Grid.Row="1"
                 Padding="20"
                 VerticalScrollBarVisibility="Auto">
-                <StackPanel MaxWidth="1200" HorizontalAlignment="Center">
+                <StackPanel MaxWidth="1500" HorizontalAlignment="Center">
 
                     <!--  Loading Indicator  -->
                     <Grid Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -131,8 +133,8 @@
                         <!--  Two Column Layout  -->
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="400" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="430" />
+                                <ColumnDefinition Width="450" />
                             </Grid.ColumnDefinitions>
 
                             <!--  Left Column: User Information  -->
@@ -265,55 +267,8 @@
                                         </Grid>
                                     </Grid>
                                 </Border>
-
-                                <!--  ATM Summary Card  -->
-                                <Border
-                                    Padding="25"
-                                    Background="White"
-                                    BorderBrush="{DynamicResource BorderColor}"
-                                    BorderThickness="1"
-                                    CornerRadius="8">
-                                    <StackPanel>
-                                        <TextBlock
-                                            Margin="0,0,0,20"
-                                            FontSize="18"
-                                            FontWeight="SemiBold"
-                                            Foreground="{DynamicResource PrimaryColor}"
-                                            Text="{DynamicResource ATMSummary}" />
-
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                                <TextBlock
-                                                    FontSize="14"
-                                                    Foreground="{DynamicResource TextColor}"
-                                                    Text="{DynamicResource ATMCount}" />
-                                                <TextBlock
-                                                    Margin="0,5,0,0"
-                                                    FontSize="24"
-                                                    FontWeight="Bold"
-                                                    Foreground="{DynamicResource PrimaryColor}"
-                                                    Text="{Binding ATMs.Count,Mode=OneWay}" />
-                                            </StackPanel>
-
-                                            <Button
-                                                Grid.Column="1"
-                                                Padding="15,10"
-                                                Command="{Binding AddATMCommand}"
-                                                Content="{DynamicResource AddATM}"
-                                                FontSize="14"
-                                                Style="{DynamicResource PrimaryButtonStyle}" />
-                                        </Grid>
-                                    </StackPanel>
-                                </Border>
-
                                 <!--  Last Login Info  -->
                                 <Border
-                                    Margin="0,20,0,0"
                                     Padding="15"
                                     Background="{DynamicResource BackgroundColor}"
                                     BorderBrush="{DynamicResource BorderColor}"
@@ -369,7 +324,7 @@
                                             FontSize="14"
                                             Foreground="{DynamicResource TextColor}">
                                             <Run Text="{DynamicResource Total}" />
-                                            <Run FontWeight="Bold" Text="{Binding ATMs.Count,Mode=OneWay}" />
+                                            <Run FontWeight="Bold" Text="{Binding ATMs.Count, Mode=OneWay}" />
                                             <Run Text="{DynamicResource ATMs}" />
                                         </TextBlock>
                                     </Grid>
@@ -384,39 +339,43 @@
 
                                     <ScrollViewer MaxHeight="600" VerticalScrollBarVisibility="Auto">
                                         <Grid>
-
-
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
                                             <!--  Empty State  -->
                                             <StackPanel
-                                            Margin="40"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Visibility="{Binding ATMs.Count,Mode=OneWay, Converter={StaticResource CountToVisibilityConverter}}">
-                                                <TextBlock
-                                                Margin="0,0,0,20"
+                                                Grid.Row="1"
+                                                Margin="40"
                                                 HorizontalAlignment="Center"
-                                                FontSize="16"
-                                                FontStyle="Italic"
-                                                Foreground="Gray"
-                                                Text="{DynamicResource NoATMsMessage}"
-                                                TextAlignment="Center" />
+                                                VerticalAlignment="Center">
+                                                <TextBlock
+                                                    Margin="0,0,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="16"
+                                                    FontStyle="Italic"
+                                                    Foreground="Gray"
+                                                    Text="{DynamicResource NoATMsMessage}"
+                                                    TextAlignment="Center"
+                                                    TextWrapping="Wrap"
+                                                    Visibility="{Binding ATMs.Count, Mode=OneWay, Converter={StaticResource CountToVisibilityConverter}}" />
                                                 <Button
-                                                Padding="20,10"
-                                                Command="{Binding AddATMCommand}"
-                                                Content="{DynamicResource AddFirstATM}"
-                                                Style="{DynamicResource PrimaryButtonStyle}" />
+                                                    Padding="20,10"
+                                                    Command="{Binding AddATMCommand}"
+                                                    Content="{DynamicResource AddATM}"
+                                                    Style="{DynamicResource PrimaryButtonStyle}" />
                                             </StackPanel>
 
                                             <!--  ATM List  -->
-                                            <ItemsControl ItemsSource="{Binding ATMs}" Visibility="{Binding ATMs.Count,Mode=OneWay, Converter={StaticResource InverseCountToVisibilityConverter}}">
+                                            <ItemsControl ItemsSource="{Binding ATMs}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border
-                                                        Margin="15,10,15,10"
-                                                        Background="#FAFAFA"
-                                                        BorderBrush="{DynamicResource BorderColor}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="6">
+                                                            Margin="15,10,15,10"
+                                                            Background="#FAFAFA"
+                                                            BorderBrush="{DynamicResource BorderColor}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="6">
                                                             <Grid Margin="20,15">
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="80" />
@@ -426,58 +385,58 @@
 
                                                                 <!--  ATM Icon  -->
                                                                 <Image
-                                                                Grid.Column="0"
-                                                                Width="60"
-                                                                Height="60"
-                                                                Source="{Binding ATMType, Converter={StaticResource ATMTypeToImageConverter}}"
-                                                                Stretch="Uniform" />
+                                                                    Grid.Column="0"
+                                                                    Width="60"
+                                                                    Height="60"
+                                                                    Source="{Binding ATMType, Converter={StaticResource ATMTypeToImageConverter}}"
+                                                                    Stretch="Uniform" />
 
                                                                 <!--  ATM Details  -->
                                                                 <StackPanel Grid.Column="1" Margin="15,0,0,0">
                                                                     <TextBlock
-                                                                    FontSize="16"
-                                                                    FontWeight="Bold"
-                                                                    Text="{Binding ATMNumber}" />
+                                                                        FontSize="16"
+                                                                        FontWeight="Bold"
+                                                                        Text="{Binding ATMNumber}" />
                                                                     <TextBlock
-                                                                    Margin="0,2,0,0"
-                                                                    FontSize="13"
-                                                                    Foreground="Gray"
-                                                                    Text="{Binding ATMType, Converter={StaticResource ATMTypeToDisplayNameConverter}}" />
+                                                                        Margin="0,2,0,0"
+                                                                        FontSize="13"
+                                                                        Foreground="Gray"
+                                                                        Text="{Binding ATMType, Converter={StaticResource ATMTypeToDisplayNameConverter}}" />
                                                                     <TextBlock
-                                                                    Margin="0,2,0,0"
-                                                                    FontSize="13"
-                                                                    Text="{Binding Location}" />
+                                                                        Margin="0,2,0,0"
+                                                                        FontSize="13"
+                                                                        Text="{Binding Location}" />
                                                                     <TextBlock
-                                                                    Margin="0,2,0,0"
-                                                                    FontSize="13"
-                                                                    Text="{Binding BranchName}" />
+                                                                        Margin="0,2,0,0"
+                                                                        FontSize="13"
+                                                                        Text="{Binding BranchName}" />
                                                                     <TextBlock
-                                                                    Margin="0,5,0,0"
-                                                                    FontSize="12"
-                                                                    FontWeight="SemiBold"
-                                                                    Foreground="{Binding IsActive, Converter={StaticResource BooleanToStatusColorConverter}}"
-                                                                    Text="{Binding IsActive, Converter={StaticResource BooleanToStatusConverter}}" />
+                                                                        Margin="0,5,0,0"
+                                                                        FontSize="12"
+                                                                        FontWeight="SemiBold"
+                                                                        Foreground="{Binding IsActive, Converter={StaticResource BooleanToStatusColorConverter}}"
+                                                                        Text="{Binding IsActive, Converter={StaticResource BooleanToStatusConverter}}" />
                                                                 </StackPanel>
 
                                                                 <!--  Action Buttons  -->
                                                                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                                                                     <Button
-                                                                    Width="60"
-                                                                    Height="30"
-                                                                    Margin="0,0,5,0"
-                                                                    Command="{Binding DataContext.EditATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                    CommandParameter="{Binding}"
-                                                                    Content="{DynamicResource Edit}"
-                                                                    FontSize="11"
-                                                                    Style="{DynamicResource SecondaryButtonStyle}" />
+                                                                        Width="60"
+                                                                        Height="50"
+                                                                        Margin="0,0,5,0"
+                                                                        Command="{Binding DataContext.EditATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="{DynamicResource Edit}"
+                                                                        FontSize="11"
+                                                                        Style="{DynamicResource SecondaryButtonStyle}" />
                                                                     <Button
-                                                                    Width="60"
-                                                                    Height="30"
-                                                                    Command="{Binding DataContext.DeleteATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                    CommandParameter="{Binding}"
-                                                                    Content="{DynamicResource Delete}"
-                                                                    FontSize="11"
-                                                                    Style="{DynamicResource DangerButtonStyle}" />
+                                                                        Width="50"
+                                                                        Height="50"
+                                                                        Command="{Binding DataContext.DeleteATMCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="X"
+                                                                        FontSize="11"
+                                                                        Style="{DynamicResource DangerButtonStyle}" />
                                                                 </StackPanel>
                                                             </Grid>
                                                         </Border>

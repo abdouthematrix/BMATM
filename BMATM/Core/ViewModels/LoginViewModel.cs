@@ -2,7 +2,7 @@
 
 public class LoginViewModel : ViewModelBase
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly DatabaseInitializationManager database;
     private string _username = string.Empty;
     private string _password = string.Empty;
     private bool _rememberMe;
@@ -49,9 +49,9 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
 
-    public LoginViewModel(IAuthenticationService authenticationService)
+    public LoginViewModel(DatabaseInitializationManager DatabaseManager)
     {
-        _authenticationService = authenticationService;
+        database = DatabaseManager;
         LoginCommand = new RelayCommand(async () => await LoginAsync(), CanLogin);
         // Load saved username if remember is set
         RememberMe = Properties.Settings.Default.RememberMe;
@@ -73,18 +73,18 @@ public class LoginViewModel : ViewModelBase
 
         try
         {
-            var result = await _authenticationService.AuthenticateAsync(Username, Password);
+            var result = await database._userService.AuthenticateAsync(Username, Password);
 
             if (result.IsSuccess)
             {
-                if (RememberMe)                
-                    Properties.Settings.Default.SavedUsername = Username;                
-                else                
-                    Properties.Settings.Default.SavedUsername = string.Empty;
-                Properties.Settings.Default.RememberMe = RememberMe;
-                Properties.Settings.Default.Save();
+                if (RememberMe)
+                    Settings.Default.SavedUsername = Username;
+                else
+                    Settings.Default.SavedUsername = string.Empty;
+                Settings.Default.RememberMe = RememberMe;
+                Settings.Default.Save();
                 // Navigate to supervisor profile or main dashboard
-                NavigationHelper.NavigateTo<SupervisorProfileView>();               
+                NavigationHelper.NavigateTo<SupervisorProfileView, User>(result.User);
             }
             else
             {

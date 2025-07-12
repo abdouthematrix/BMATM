@@ -1,10 +1,11 @@
-﻿
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Input;
 
 namespace BMATM;
 public partial class App : Application
 {
     public static IHost AppHost { get; private set; }
-    private void Application_Startup(object sender, StartupEventArgs e)
+    private async void Application_Startup(object sender, StartupEventArgs e)
     {
         AppHost = Host.CreateDefaultBuilder()
            .ConfigureServices((context, services) =>
@@ -13,30 +14,24 @@ public partial class App : Application
            })
            .Build();
         AppHost.Start();
+
+        // Resolve and show MainWindow via DI
+        var manager = AppHost.Services.GetRequiredService<DatabaseInitializationManager>();
+        await manager.InitializeAllAsync();
+
         // Resolve and show MainWindow via DI
         var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
 
-    private void ConfigureServices(IServiceCollection services)
+    private async void ConfigureServices(IServiceCollection services)
     {
-        // Register Data
-        services.AddSingleton<DatabaseContext, DatabaseContext>();        
-        services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddSingleton<ISupervisorProfileRepository, SupervisorProfileRepository>();
-        services.AddSingleton<IATMRepository, ATMRepository>();
-        // ... more services
-
-        // Register Services
-        services.AddSingleton<IAuthenticationService, SQLiteAuthenticationService>();
-        services.AddSingleton<IUserDataService, SQLiteUserDataService>();
-        services.AddSingleton<IATMDataService, SQLiteATMDataService>();
-        // ... more services
+        services.AddBMATMDataServices("Data Source=bmatm.db;");
 
         // Register ViewModels        
         services.AddTransient<LoginViewModel>();
         services.AddTransient<SupervisorProfileViewModel>();
-        services.AddTransient<AddATMViewModel>();
+        services.AddTransient<ATMViewModel>();
 
         services.AddSingleton<MainWindowViewModel>();
         // ... more VMs
@@ -59,6 +54,7 @@ public partial class App : Application
 
     private static bool _isLanguageMetadataSet = false;
 
+    public static string CurrentLanguage;
     public static void SetLanguage(string languageCode)
     {
         var culture = new CultureInfo(languageCode);
@@ -112,7 +108,40 @@ public partial class App : Application
                 Current.MainWindow.FlowDirection = flowDirection;
         }
 
+        CurrentLanguage = languageCode;
         Settings.Default.Language = languageCode;
         Settings.Default.Save();
+
+    }
+    public static string GetLocalizedString(string key, params object[] args)
+    {
+        try
+        {
+            var resourceDict = Application.Current.Resources.MergedDictionaries
+                .FirstOrDefault(d => d.Source?.OriginalString?.Contains($"Strings.{CurrentLanguage}") == true);
+
+            if (resourceDict != null && resourceDict.Contains(key))
+            {
+                var format = resourceDict[key].ToString();
+                return args?.Length > 0 ? string.Format(format, args) : format;
+            }
+
+            // Fallback to English if current language resource not found
+            var fallbackDict = Application.Current.Resources.MergedDictionaries
+                .FirstOrDefault(d => d.Source?.OriginalString?.Contains("Strings.en") == true);
+
+            if (fallbackDict != null && fallbackDict.Contains(key))
+            {
+                var format = fallbackDict[key].ToString();
+                return args?.Length > 0 ? string.Format(format, args) : format;
+            }
+
+            return key; // Return key as fallback
+        }
+        catch
+        {
+            return key; // Return key as fallback if any error occurs
+        }
     }
 }
+    

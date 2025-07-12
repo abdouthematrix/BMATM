@@ -36,17 +36,15 @@ public class MainWindowViewModel : ViewModelBase
         CurrentLanguage = Settings.Default.Language;
         App.SetLanguage(CurrentLanguage);       
         SwitchLanguageCommand = new RelayCommand(SwitchLanguage);
-
         // Subscribe to navigation events
         NavigationHelper.NavigationRequested += OnNavigationRequested;
-
         // Start with login view
         NavigationHelper.NavigateTo<LoginView>();
     }
 
-    private void OnNavigationRequested(UserControl view)
+    private void OnNavigationRequested(UserControl view, object? parameter)
     {
-        CurrentView = view;
+        CurrentView = view;       
     }
 
     private void SwitchLanguage()

@@ -24,6 +24,16 @@
     <sys:String x:Key="DomainUsername">اسم المستخدم للنطاق</sys:String>
     <sys:String x:Key="RememberMe">تذكرني</sys:String>
 
+    <!--  Authentication Error Messages  -->
+    <sys:String x:Key="AuthUsernameRequired">اسم المستخدم مطلوب</sys:String>
+    <sys:String x:Key="AuthPasswordRequired">كلمة المرور مطلوبة</sys:String>
+    <sys:String x:Key="AuthAccountLocked">تم قفل الحساب بسبب كثرة المحاولات الفاشلة. حاول مرة أخرى خلال {0} دقيقة.</sys:String>
+    <sys:String x:Key="AuthInvalidCredentials">اسم المستخدم أو كلمة المرور غير صحيحة</sys:String>
+    <sys:String x:Key="AuthUserNotFound">اسم المستخدم أو كلمة المرور غير صحيحة</sys:String>
+    <sys:String x:Key="AuthUserInactive">حساب المستخدم معطل</sys:String>
+    <sys:String x:Key="AuthDatabaseError">حدث خطأ أثناء المصادقة</sys:String>
+    <sys:String x:Key="AuthAttemptsRemaining">{0} محاولة متبقية.</sys:String>
+
     <!--  Supervisor Profile Screen  -->
     <sys:String x:Key="Name">الاسم</sys:String>
     <sys:String x:Key="SupervisorProfile">ملف المشرف</sys:String>
@@ -44,10 +54,10 @@
     <sys:String x:Key="Loading">جاري التحميل...</sys:String>
 
     <!--  ATM Collection View  -->
-    <!-- ATM Summary Section -->
+    <!--  ATM Summary Section  -->
     <sys:String x:Key="ATMSummary">ملخص الصرافات</sys:String>
 
-    <!-- ATM Collection Display -->
+    <!--  ATM Collection Display  -->
     <sys:String x:Key="Total">المجموع</sys:String>
     <sys:String x:Key="ATMs">صرافات</sys:String>
     <sys:String x:Key="AddFirstATM">إضافة أول صراف</sys:String>
