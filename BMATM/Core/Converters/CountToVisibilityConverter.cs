@@ -1,36 +1,66 @@
 ﻿namespace BMATM.Converters;
+
 /// <summary>
-/// Converts a count/number to Visibility. 
-/// Returns Visible when count is 0 (for empty states), Collapsed otherwise.
-/// Optional parameter can specify threshold (e.g., "5" to show when count <= 5).
+/// Unified converter for count/number to Visibility
+/// Parameters:
+/// - Number only (e.g., "5") = threshold value (default 0)
+/// - "inverse" or "!" = inverts the visibility logic
+/// - "5,inverse" = uses threshold 5 and inverts logic
+/// 
+/// Normal: count <= threshold = Visible, count > threshold = Collapsed
+/// Inverse: count <= threshold = Collapsed, count > threshold = Visible
 /// </summary>
 public class CountToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value == null)
-            return Visibility.Visible;
+            return GetDefaultVisibility(parameter);
 
-        // Try to convert to integer
-        if (int.TryParse(value.ToString(), out int count))
-        {
-            // Check if parameter specifies a threshold
-            int threshold = 0;
-            if (parameter != null && int.TryParse(parameter.ToString(), out int paramValue))
-            {
-                threshold = paramValue;
-            }
+        if (!int.TryParse(value.ToString(), out int count))
+            return GetDefaultVisibility(parameter);
 
-            // Show when count is <= threshold (default 0 for empty state)
-            return count <= threshold ? Visibility.Visible : Visibility.Collapsed;
-        }
+        var (threshold, shouldInvert) = ParseParameter(parameter);
 
-        // If conversion fails, assume empty state
-        return Visibility.Visible;
+        bool isVisible = count <= threshold;
+
+        if (shouldInvert)
+            isVisible = !isVisible;
+
+        return isVisible ? Visibility.Visible : Visibility.Collapsed;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException("CountToVisibilityConverter is a one-way converter.");
+        throw new NotImplementedException("UnifiedCountToVisibilityConverter is a one-way converter.");
+    }
+
+    private (int threshold, bool shouldInvert) ParseParameter(object parameter)
+    {
+        var paramStr = parameter?.ToString()?.ToLower() ?? "";
+        var shouldInvert = paramStr.Contains("inverse") || paramStr.Contains("!");
+
+        // Extract threshold value
+        var parts = paramStr.Split(',');
+        int threshold = 0;
+
+        foreach (var part in parts)
+        {
+            var cleanPart = part.Trim().Replace("inverse", "").Replace("!", "");
+            if (int.TryParse(cleanPart, out int value))
+            {
+                threshold = value;
+                break;
+            }
+        }
+
+        return (threshold, shouldInvert);
+    }
+
+    private Visibility GetDefaultVisibility(object parameter)
+    {
+        var (_, shouldInvert) = ParseParameter(parameter);
+        // Default for null value: show if not inverted, hide if inverted
+        return shouldInvert ? Visibility.Collapsed : Visibility.Visible;
     }
 }

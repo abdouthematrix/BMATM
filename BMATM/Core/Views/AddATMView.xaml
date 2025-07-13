@@ -24,7 +24,7 @@
                 FontSize="24"
                 FontWeight="Bold"
                 Foreground="White"
-                Text="{Binding IsEditMode, Converter={StaticResource BooleanToAddEditTitleConverter}}" />
+                Text="{Binding EditTitle}" />
         </Grid>
 
         <!--  Form Content  -->
@@ -69,7 +69,7 @@
                             <TextBox
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                IsEnabled="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
+                                IsEnabled="{Binding IsEditMode, Converter={StaticResource BooleanConverter}, ConverterParameter='inverse'}"
                                 Style="{StaticResource TextBoxStyle}"
                                 Text="{Binding ATMNumber, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -245,8 +245,8 @@
                 <Button
                     Width="100"
                     Command="{Binding SaveCommand}"
-                    Content="{Binding IsSaving, Converter={StaticResource BooleanToSavingTextConverter}}"
-                    IsEnabled="{Binding IsSaving, Converter={StaticResource InverseBooleanConverter}}"
+                    Content="{Binding SavingText}"
+                    IsEnabled="{Binding IsSaving, Converter={StaticResource BooleanConverter}, ConverterParameter='inverse'}"
                     Style="{StaticResource PrimaryButtonStyle}" />
             </StackPanel>
         </Border>

@@ -42,13 +42,15 @@ public class ATMViewModel : ViewModelBase
 
     public SupervisorProfile SupervisorProfile;
 
+    public string SavingText => IsSaving ? "Saving..." : "Save";
+    public string EditTitle => IsEditMode ? "Edit ATM" : "Add ATM";
     public bool IsEditMode
     {
         get => _isEditMode;
         set
         {
-            _isEditMode = value;
-            OnPropertyChanged();
+            if (SetProperty(ref _isEditMode, value))
+                OnPropertyChanged(nameof(EditTitle));
         }
     }
 
@@ -57,9 +59,11 @@ public class ATMViewModel : ViewModelBase
         get => _isSaving;
         set
         {
-            _isSaving = value;
-            OnPropertyChanged();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+            if (SetProperty(ref _isSaving, value))
+            {
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+                OnPropertyChanged(nameof(EditTitle));
+            }
         }
     }
 
@@ -68,20 +72,15 @@ public class ATMViewModel : ViewModelBase
         get => _atmNumber;
         set
         {
-            _atmNumber = value;
-            OnPropertyChanged();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-        }
+            if (SetProperty(ref _atmNumber, value))
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }       
     }
 
     public ATMType SelectedATMType
     {
         get => _selectedATMType;
-        set
-        {
-            _selectedATMType = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _selectedATMType, value);
     }
 
     public string GLAccount
@@ -89,10 +88,9 @@ public class ATMViewModel : ViewModelBase
         get => _glAccount;
         set
         {
-            _glAccount = value;
-            OnPropertyChanged();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-        }
+            if (SetProperty(ref _glAccount, value))
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }        
     }
 
     public string BranchCode
@@ -100,10 +98,9 @@ public class ATMViewModel : ViewModelBase
         get => _branchCode;
         set
         {
-            _branchCode = value;
-            OnPropertyChanged();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-        }
+            if (SetProperty(ref _branchCode, value))
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }        
     }
 
     public string BranchName
@@ -111,60 +108,39 @@ public class ATMViewModel : ViewModelBase
         get => _branchName;
         set
         {
-            _branchName = value;
-            OnPropertyChanged();
-            ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-        }
+            if (SetProperty(ref _branchName, value))
+                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
+        }        
     }
 
     public int Cassette1Denomination
     {
         get => _cassette1Denomination;
-        set
-        {
-            _cassette1Denomination = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _cassette1Denomination, value);
     }
 
     public int Cassette2Denomination
     {
         get => _cassette2Denomination;
-        set
-        {
-            _cassette2Denomination = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _cassette2Denomination, value);
     }
 
     public int Cassette3Denomination
     {
         get => _cassette3Denomination;
-        set
-        {
-            _cassette3Denomination = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _cassette3Denomination, value);
     }
 
     public int Cassette4Denomination
     {
         get => _cassette4Denomination;
-        set
-        {
-            _cassette4Denomination = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _cassette4Denomination, value);
     }
 
     public bool IsActive
     {
         get => _isActive;
-        set
-        {
-            _isActive = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _isActive, value);
     }
     public List<ATMType> ATMTypes => Enum.GetValues(typeof(ATMType)).Cast<ATMType>().ToList();
     public List<int> CassetteDenominations => new List<int> { 200 , 100 ,50 ,20, 10, 5};

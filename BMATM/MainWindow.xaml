@@ -14,44 +14,61 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <!--  Company Logo Background  -->
+        <Grid.Background>
+            <ImageBrush
+                AlignmentY="Top"
+                ImageSource="/Resources/Images/CompanyLogo.png"
+                Opacity="0.75"
+                Stretch="Uniform"
+                TileMode="Tile"
+                Viewport="0,0,50,50"
+                ViewportUnits="Absolute" />
+        </Grid.Background>
 
-        <!--  Header with Language Switcher  -->
-        <Border
-            Grid.Row="0"
-            Padding="10"
-            Background="{DynamicResource HeaderBackground}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+        <!--  Overlay for better readability  -->
+        <Grid Background="#F8F9FA" Opacity="0.75" />
 
-                <TextBlock
-                    Grid.Column="0"
-                    Style="{DynamicResource HeaderTextStyle}"
-                    Text="{DynamicResource AppTitle}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-                <StackPanel
-                    Grid.Column="1"
-                    Margin="10,0,0,0"
-                    Orientation="Horizontal">
-                    <Button
-                        Margin="0,0,5,0"
-                        Command="{Binding SwitchLanguageCommand}"
-                        Content="{Binding CurrentLanguageLabel, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{DynamicResource LanguageButtonStyle}" />
-                </StackPanel>
-            </Grid>
-        </Border>
+            <!--  Header with Language Switcher  -->
+            <Border
+                Grid.Row="0"
+                Padding="10"
+                Background="{DynamicResource HeaderBackground}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-        <!--  Main Content Area  -->
-        <ContentControl
-            x:Name="MainContent"
-            Grid.Row="1"
-            Content="{Binding CurrentView}" />
+                    <TextBlock
+                        Grid.Column="0"
+                        Style="{DynamicResource HeaderTextStyle}"
+                        Text="{DynamicResource AppTitle}" />
+
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="10,0,0,0"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="0,0,5,0"
+                            Command="{Binding SwitchLanguageCommand}"
+                            Content="{Binding CurrentLanguageLabel, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{DynamicResource LanguageButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--  Main Content Area  -->
+            <ContentControl
+                x:Name="MainContent"
+                Grid.Row="1"
+                Content="{Binding CurrentView}" />
+        </Grid>
     </Grid>
 </Window>

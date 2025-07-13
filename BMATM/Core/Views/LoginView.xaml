@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{DynamicResource BackgroundColor}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -75,19 +75,19 @@
                     Height="45"
                     Margin="0,10,0,0"
                     Command="{Binding LoginCommand}"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanConverter}, ConverterParameter=inverse}"
                     Style="{DynamicResource PrimaryButtonStyle}">
                     <Grid>
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Text="{DynamicResource LoginButton}"
-                            Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanConverter}, ConverterParameter='inverse,visibility'}" />
                         <ProgressBar
                             Width="20"
                             Height="20"
                             IsIndeterminate="True"
-                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            Visibility="{Binding IsLoading, Converter={StaticResource BooleanConverter}, ConverterParameter=visibility}" />
                     </Grid>
                 </Button>
 

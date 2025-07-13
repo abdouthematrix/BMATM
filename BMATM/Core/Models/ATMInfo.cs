@@ -1,4 +1,9 @@
 ﻿namespace BMATM.Models;
+public enum ATMType
+{
+    NCR,
+    DN
+}
 public class ATMInfo : ViewModelBase
 {
     public string Username { get; set; }
@@ -21,7 +26,14 @@ public class ATMInfo : ViewModelBase
     public ATMType ATMType
     {
         get => _atmType;
-        set => SetProperty(ref _atmType, value);
+        set
+        {
+            if (SetProperty(ref _atmType, value))
+            { 
+                OnPropertyChanged(nameof(ATMDisplayName));
+                OnPropertyChanged(nameof(ATMImagePath));
+            }
+        }
     }
 
     public string GLAccount
@@ -67,10 +79,30 @@ public class ATMInfo : ViewModelBase
     public bool IsActive
     {
         get => _isActive;
-        set
+        set => SetProperty(ref _isActive, value);
+    }
+    public string ATMDisplayName
+    {
+        get
         {
-            _isActive = value;
-            OnPropertyChanged();
+            return _atmType switch
+            {
+                ATMType.NCR => "NCR",
+                ATMType.DN => "Diebold Nixdorf",
+                _ => throw new ArgumentOutOfRangeException(nameof(_atmType), _atmType, null)
+            };
+        }
+    }
+    public string ATMImagePath
+    {
+        get
+        {
+            return _atmType switch
+            {
+                ATMType.NCR => "pack://application:,,,/Resources/Images/NCR_ATM.png",
+                ATMType.DN => "pack://application:,,,/Resources/Images/DN_ATM.png",
+                _ => throw new ArgumentOutOfRangeException(nameof(_atmType), _atmType, null)
+            };
         }
     }
 }
