@@ -10,44 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Images\24hours.png" />
-    <None Remove="Resources\Images\account.png" />
-    <None Remove="Resources\Images\add.png" />
-    <None Remove="Resources\Images\alert.png" />
-    <None Remove="Resources\Images\arrow-left.png" />
-    <None Remove="Resources\Images\arrow-right.png" />
-    <None Remove="Resources\Images\atm.png" />
-    <None Remove="Resources\Images\atmlogo.png" />
-    <None Remove="Resources\Images\bigatm.png" />
-    <None Remove="Resources\Images\bm.png" />
-    <None Remove="Resources\Images\bm2.png" />
-    <None Remove="Resources\Images\bmatm.ico" />
-    <None Remove="Resources\Images\bmatm.png" />
-    <None Remove="Resources\Images\calendar.png" />
-    <None Remove="Resources\Images\CompanyLogo.png" />
-    <None Remove="Resources\Images\csharp.png" />
-    <None Remove="Resources\Images\delete.png" />
-    <None Remove="Resources\Images\download.png" />
-    <None Remove="Resources\Images\edit.png" />
-    <None Remove="Resources\Images\editaccount.png" />
-    <None Remove="Resources\Images\excel.png" />
-    <None Remove="Resources\Images\excel2.png" />
-    <None Remove="Resources\Images\exit.png" />
-    <None Remove="Resources\Images\file.png" />
-    <None Remove="Resources\Images\grid.png" />
-    <None Remove="Resources\Images\home.png" />
-    <None Remove="Resources\Images\logs.png" />
-    <None Remove="Resources\Images\printer.png" />
-    <None Remove="Resources\Images\remove.png" />
-    <None Remove="Resources\Images\save.png" />
-    <None Remove="Resources\Images\textsearch.png" />
-    <None Remove="Resources\Images\textsearch2.png" />
-    <None Remove="Resources\Images\tree.png" />
-    <None Remove="Resources\Images\viewer.png" />
-    <None Remove="Resources\Images\web.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Remove="Resources\Strings.ar.xaml" />
     <Page Remove="Resources\Strings.en.xaml" />
     <Page Remove="Resources\Styles.xaml" />
@@ -61,43 +23,9 @@
 
   <ItemGroup>
     <Resource Include="bmatm.ico" />
-    <Resource Include="Resources\Images\24hours.png" />
-    <Resource Include="Resources\Images\account.png" />
-    <Resource Include="Resources\Images\add.png" />
-    <Resource Include="Resources\Images\alert.png" />
-    <Resource Include="Resources\Images\arrow-left.png" />
-    <Resource Include="Resources\Images\arrow-right.png" />
-    <Resource Include="Resources\Images\atm.png" />
-    <Resource Include="Resources\Images\atmlogo.png" />
-    <Resource Include="Resources\Images\bigatm.png" />
-    <Resource Include="Resources\Images\bm.png" />
-    <Resource Include="Resources\Images\bm2.png" />
-    <Resource Include="Resources\Images\bmatm.ico" />
-    <Resource Include="Resources\Images\bmatm.png" />
-    <Resource Include="Resources\Images\calendar.png" />
     <Resource Include="Resources\Images\CompanyLogo.png" />
-    <Resource Include="Resources\Images\csharp.png" />
-    <Resource Include="Resources\Images\delete.png" />
     <Resource Include="Resources\Images\DN_ATM.png" />
-    <Resource Include="Resources\Images\download.png" />
-    <Resource Include="Resources\Images\edit.png" />
-    <Resource Include="Resources\Images\editaccount.png" />
-    <Resource Include="Resources\Images\excel.png" />
-    <Resource Include="Resources\Images\excel2.png" />
-    <Resource Include="Resources\Images\exit.png" />
-    <Resource Include="Resources\Images\file.png" />
-    <Resource Include="Resources\Images\grid.png" />
-    <Resource Include="Resources\Images\home.png" />
-    <Resource Include="Resources\Images\logs.png" />
     <Resource Include="Resources\Images\NCR_ATM.png" />
-    <Resource Include="Resources\Images\printer.png" />
-    <Resource Include="Resources\Images\remove.png" />
-    <Resource Include="Resources\Images\save.png" />
-    <Resource Include="Resources\Images\textsearch.png" />
-    <Resource Include="Resources\Images\textsearch2.png" />
-    <Resource Include="Resources\Images\tree.png" />
-    <Resource Include="Resources\Images\viewer.png" />
-    <Resource Include="Resources\Images\web.png" />
   </ItemGroup>
 
   <ItemGroup>
