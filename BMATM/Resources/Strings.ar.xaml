@@ -7,20 +7,19 @@
     <sys:String x:Key="ResourceDictionaryName">Strings.ar</sys:String>
 
     <!--  Application Title  -->
-    <sys:String x:Key="AppTitle">BMATM - نظام إدارة الصرافات الآلية</sys:String>
+    <sys:String x:Key="AppTitle">BMATM - نظام إدارة الات الصرف الذاتي</sys:String>
 
     <!--  Flow Direction  -->
     <FlowDirection x:Key="FlowDirection">RightToLeft</FlowDirection>
 
     <!--  Welcome Messages  -->
-    <sys:String x:Key="WelcomeMessage">مرحباً بك في نظام إدارة الصرافات الآلية</sys:String>
+    <sys:String x:Key="WelcomeMessage">مرحباً بك في نظام إدارة الات الصرف الذاتي</sys:String>
 
     <!--  Login Screen  -->
     <sys:String x:Key="LoginTitle">تسجيل الدخول</sys:String>
     <sys:String x:Key="Username">اسم المستخدم</sys:String>
     <sys:String x:Key="Password">كلمة المرور</sys:String>
     <sys:String x:Key="LoginButton">تسجيل الدخول</sys:String>
-    <sys:String x:Key="LoginError">اسم المستخدم أو كلمة المرور غير صحيحة</sys:String>
     <sys:String x:Key="DomainUsername">اسم المستخدم للنطاق</sys:String>
     <sys:String x:Key="RememberMe">تذكرني</sys:String>
 
@@ -35,86 +34,43 @@
     <sys:String x:Key="AuthAttemptsRemaining">{0} محاولة متبقية.</sys:String>
 
     <!--  Supervisor Profile Screen  -->
-    <sys:String x:Key="Name">الاسم</sys:String>
     <sys:String x:Key="SupervisorProfile">ملف المشرف</sys:String>
-    <sys:String x:Key="Welcome">مرحباً</sys:String>
     <sys:String x:Key="UserInformation">معلومات المستخدم</sys:String>
     <sys:String x:Key="DisplayName">الاسم الكامل</sys:String>
     <sys:String x:Key="Email">البريد الإلكتروني</sys:String>
     <sys:String x:Key="Department">القسم</sys:String>
     <sys:String x:Key="BranchNumber">رقم الفرع</sys:String>
     <sys:String x:Key="BranchName">اسم الفرع</sys:String>
-    <sys:String x:Key="ATMCollection">مجموعة الصرافات</sys:String>
-    <sys:String x:Key="ATMCount">عدد الصرافات</sys:String>
-    <sys:String x:Key="AddATM">إضافة صراف</sys:String>
-    <sys:String x:Key="NoATMsMessage">لم يتم تكوين صرافات بعد. انقر على 'إضافة صراف' للبدء.</sys:String>
+    <sys:String x:Key="ATMCollection">مجموعة الات الصرف الذاتي</sys:String>
+    <sys:String x:Key="AddATM">إضافة الة صرف ذاتي</sys:String>
+    <sys:String x:Key="NoATMsMessage">لم يتم تكوين الات صرف ذاتي بعد. انقر على 'إضافة الة صرف ذاتي' للبدء.</sys:String>
     <sys:String x:Key="LastLogin">آخر تسجيل دخول</sys:String>
     <sys:String x:Key="Logout">تسجيل الخروج</sys:String>
     <sys:String x:Key="Refresh">تحديث</sys:String>
     <sys:String x:Key="Loading">جاري التحميل...</sys:String>
 
-    <!--  ATM Collection View  -->
-    <!--  ATM Summary Section  -->
-    <sys:String x:Key="ATMSummary">ملخص الصرافات</sys:String>
-
     <!--  ATM Collection Display  -->
     <sys:String x:Key="Total">المجموع</sys:String>
-    <sys:String x:Key="ATMs">صرافات</sys:String>
-    <sys:String x:Key="AddFirstATM">إضافة أول صراف</sys:String>
-    <sys:String x:Key="ATMCollectionTitle">مجموعة الصرافات</sys:String>
-    <sys:String x:Key="RefreshButtonText">تحديث</sys:String>
-    <sys:String x:Key="AddATMButtonText">إضافة صراف</sys:String>
-    <sys:String x:Key="LoadingText">جاري تحميل الصرافات...</sys:String>
+    <sys:String x:Key="ATMs">الات صرف ذاتي</sys:String>
     <sys:String x:Key="ATMTypeLabel">النوع:</sys:String>
-    <sys:String x:Key="LocationLabel">الموقع:</sys:String>
     <sys:String x:Key="StatusLabel">الحالة:</sys:String>
-    <sys:String x:Key="EditButtonText">تعديل</sys:String>
-    <sys:String x:Key="DeleteButtonText">حذف</sys:String>
-    <sys:String x:Key="NoATMsFoundText">لم يتم العثور على صرافات</sys:String>
-    <sys:String x:Key="AddFirstATMButtonText">إضافة أول صراف</sys:String>
-    <sys:String x:Key="TotalATMsText">إجمالي الصرافات:</sys:String>
-
-    <!--  ATM Status  -->
-    <sys:String x:Key="ActiveStatus">نشط</sys:String>
-    <sys:String x:Key="InactiveStatus">غير نشط</sys:String>
-    <sys:String x:Key="MaintenanceStatus">صيانة</sys:String>
-    <sys:String x:Key="OutOfOrderStatus">خارج الخدمة</sys:String>
-
-    <!--  ATM Types  -->
-    <sys:String x:Key="ATMTypeStandard">صراف عادي</sys:String>
-    <sys:String x:Key="ATMTypeDeposit">صراف إيداع</sys:String>
-    <sys:String x:Key="ATMTypeMobile">صراف متنقل</sys:String>
-    <sys:String x:Key="ATMTypeMultiFunction">صراف متعدد الوظائف</sys:String>
-
-    <!--  Add/Edit ATM Form  -->
-    <sys:String x:Key="AddATMTitle">إضافة صراف جديد</sys:String>
-    <sys:String x:Key="EditATMTitle">تعديل الصراف</sys:String>
 
     <!--  Group Headers  -->
     <sys:String x:Key="BasicInformationGroupHeader">المعلومات الأساسية</sys:String>
-    <sys:String x:Key="LocationInformationGroupHeader">معلومات الموقع</sys:String>
-    <sys:String x:Key="DatesInformationGroupHeader">معلومات التواريخ</sys:String>
-    <sys:String x:Key="CassetteInformationGroupHeader">معلومات الخزانات</sys:String>
-    <sys:String x:Key="NotesGroupHeader">الملاحظات</sys:String>
+    <sys:String x:Key="CassetteInformationGroupHeader">معلومات الادراج</sys:String>
 
     <!--  Basic Information Labels  -->
-    <sys:String x:Key="ATMNumberLabel">رقم الصراف:</sys:String>
+    <sys:String x:Key="ATMNumberLabel">رقم الة الصرف الذاتي:</sys:String>
     <sys:String x:Key="GLAccountLabel">حساب الأستاذ العام:</sys:String>
-    <sys:String x:Key="BranchCodeLabel">رمز الفرع:</sys:String>
+    <sys:String x:Key="BranchCodeLabel">رقم الفرع:</sys:String>
     <sys:String x:Key="BranchNameLabel">اسم الفرع:</sys:String>
 
     <!--  Location Information Labels  -->
-    <sys:String x:Key="IPAddressLabel">عنوان IP:</sys:String>
     <sys:String x:Key="ActiveStatusText">نشط</sys:String>
 
-    <!--  Dates Information Labels  -->
-    <sys:String x:Key="InstallationDateLabel">تاريخ التركيب:</sys:String>
-    <sys:String x:Key="LastMaintenanceDateLabel">تاريخ آخر صيانة:</sys:String>
-
     <!--  Cassette Information Labels  -->
-    <sys:String x:Key="CassetteLabel">خزانة</sys:String>
+    <sys:String x:Key="CassetteLabel">درج</sys:String>
     <sys:String x:Key="DenominationLabel">الفئة</sys:String>
-    <sys:String x:Key="BalanceLabel">الرصيد</sys:String>
     <sys:String x:Key="Cassette1Label">1</sys:String>
     <sys:String x:Key="Cassette2Label">2</sys:String>
     <sys:String x:Key="Cassette3Label">3</sys:String>
@@ -122,34 +78,16 @@
 
     <!--  Button Labels  -->
     <sys:String x:Key="CancelButtonText">إلغاء</sys:String>
-    <sys:String x:Key="SaveButtonText">حفظ</sys:String>
-    <sys:String x:Key="SavingText">جاري الحفظ...</sys:String>
 
-    <!--  Common  -->
-    <sys:String x:Key="OK">موافق</sys:String>
-    <sys:String x:Key="Close">إغلاق</sys:String>
-    <sys:String x:Key="Back">رجوع</sys:String>
-    <sys:String x:Key="Next">التالي</sys:String>
-    <sys:String x:Key="Previous">السابق</sys:String>
-    <sys:String x:Key="Search">بحث</sys:String>
-    <sys:String x:Key="Clear">مسح</sys:String>
-    <sys:String x:Key="Delete">حذف</sys:String>
-    <sys:String x:Key="Edit">تعديل</sys:String>
-    <sys:String x:Key="View">عرض</sys:String>
-    <sys:String x:Key="Save">حفظ</sys:String>
-    <sys:String x:Key="Cancel">إلغاء</sys:String>
-    <sys:String x:Key="Yes">نعم</sys:String>
-    <sys:String x:Key="No">لا</sys:String>
+    <!--  GL Reconciliation Strings  -->
+    <sys:String x:Key="GLReconciliation">معادلة الأستاذ العام</sys:String>
+    <sys:String x:Key="RemainingCash">النقدية المتبقية</sys:String>
+    <sys:String x:Key="GLAdjustments">تسويات الأستاذ العام</sys:String>
+    <sys:String x:Key="GLBalance">رصيد الأستاذ العام</sys:String>
+    <sys:String x:Key="Amount">المبلغ</sys:String>
+    <sys:String x:Key="AdjustmentLabel">التسوية</sys:String>
 
-    <!--  Validation Messages  -->
-    <sys:String x:Key="RequiredField">هذا الحقل مطلوب</sys:String>
-    <sys:String x:Key="InvalidFormat">تنسيق غير صحيح</sys:String>
-    <sys:String x:Key="InvalidNumber">رقم غير صحيح</sys:String>
-
-    <!--  Confirmation Messages  -->
-    <sys:String x:Key="ConfirmDelete">هل أنت متأكد من أنك تريد حذف هذا الصراف؟</sys:String>
-    <sys:String x:Key="ConfirmDeleteTitle">تأكيد الحذف</sys:String>
-    <sys:String x:Key="OperationSuccessful">تمت العملية بنجاح</sys:String>
-    <sys:String x:Key="OperationFailed">فشلت العملية. يرجى المحاولة مرة أخرى.</sys:String>
+    <!--  Formula Display  -->
+    <sys:String x:Key="Formula">المعادلة: رصيد دفتر الأستاذ العام = النقدية المتبقية ± تسويات دفتر الأستاذ العام</sys:String>
 
 </ResourceDictionary>

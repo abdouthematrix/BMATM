@@ -13,14 +13,13 @@
     <FlowDirection x:Key="FlowDirection">LeftToRight</FlowDirection>
 
     <!--  Welcome Messages  -->
-    <sys:String x:Key="WelcomeMessage">Welcome to Bank ATM Management System</sys:String>
+    <sys:String x:Key="WelcomeMessage">Welcome to ATM Management System</sys:String>
 
     <!--  Login Screen  -->
     <sys:String x:Key="LoginTitle">Login</sys:String>
     <sys:String x:Key="Username">Username</sys:String>
     <sys:String x:Key="Password">Password</sys:String>
     <sys:String x:Key="LoginButton">Login</sys:String>
-    <sys:String x:Key="LoginError">Invalid username or password</sys:String>
     <sys:String x:Key="DomainUsername">Domain Username</sys:String>
     <sys:String x:Key="RememberMe">Remember me</sys:String>
 
@@ -35,9 +34,7 @@
     <sys:String x:Key="AuthAttemptsRemaining">{0} attempts remaining.</sys:String>
 
     <!--  Supervisor Profile Screen  -->
-    <sys:String x:Key="Name">Name</sys:String>
     <sys:String x:Key="SupervisorProfile">Supervisor Profile</sys:String>
-    <sys:String x:Key="Welcome">Welcome</sys:String>
     <sys:String x:Key="UserInformation">User Information</sys:String>
     <sys:String x:Key="DisplayName">Full Name</sys:String>
     <sys:String x:Key="Email">Email Address</sys:String>
@@ -45,7 +42,6 @@
     <sys:String x:Key="BranchNumber">Branch Number</sys:String>
     <sys:String x:Key="BranchName">Branch Name</sys:String>
     <sys:String x:Key="ATMCollection">ATM Collection</sys:String>
-    <sys:String x:Key="ATMCount">ATM Count</sys:String>
     <sys:String x:Key="AddATM">Add ATM</sys:String>
     <sys:String x:Key="NoATMsMessage">No ATMs configured yet. Click 'Add ATM' to get started.</sys:String>
     <sys:String x:Key="LastLogin">Last Login</sys:String>
@@ -53,49 +49,15 @@
     <sys:String x:Key="Refresh">Refresh</sys:String>
     <sys:String x:Key="Loading">Loading...</sys:String>
 
-    <!--  ATM Collection View  -->
-    <!--  ATM Summary Section  -->
-    <sys:String x:Key="ATMSummary">ATM Summary</sys:String>
-
     <!--  ATM Collection Display  -->
     <sys:String x:Key="Total">Total</sys:String>
     <sys:String x:Key="ATMs">ATMs</sys:String>
-    <sys:String x:Key="AddFirstATM">Add First ATM</sys:String>
-    <sys:String x:Key="ATMCollectionTitle">ATM Collection</sys:String>
-    <sys:String x:Key="RefreshButtonText">Refresh</sys:String>
-    <sys:String x:Key="AddATMButtonText">Add ATM</sys:String>
-    <sys:String x:Key="LoadingText">Loading ATMs...</sys:String>
     <sys:String x:Key="ATMTypeLabel">Type:</sys:String>
-    <sys:String x:Key="LocationLabel">Location:</sys:String>
     <sys:String x:Key="StatusLabel">Status:</sys:String>
-    <sys:String x:Key="EditButtonText">Edit</sys:String>
-    <sys:String x:Key="DeleteButtonText">Delete</sys:String>
-    <sys:String x:Key="NoATMsFoundText">No ATMs found</sys:String>
-    <sys:String x:Key="AddFirstATMButtonText">Add First ATM</sys:String>
-    <sys:String x:Key="TotalATMsText">Total ATMs:</sys:String>
-
-    <!--  ATM Status  -->
-    <sys:String x:Key="ActiveStatus">Active</sys:String>
-    <sys:String x:Key="InactiveStatus">Inactive</sys:String>
-    <sys:String x:Key="MaintenanceStatus">Maintenance</sys:String>
-    <sys:String x:Key="OutOfOrderStatus">Out of Order</sys:String>
-
-    <!--  ATM Types  -->
-    <sys:String x:Key="ATMTypeStandard">Standard ATM</sys:String>
-    <sys:String x:Key="ATMTypeDeposit">Deposit ATM</sys:String>
-    <sys:String x:Key="ATMTypeMobile">Mobile ATM</sys:String>
-    <sys:String x:Key="ATMTypeMultiFunction">Multi-Function ATM</sys:String>
-
-    <!--  Add/Edit ATM Form  -->
-    <sys:String x:Key="AddATMTitle">Add New ATM</sys:String>
-    <sys:String x:Key="EditATMTitle">Edit ATM</sys:String>
 
     <!--  Group Headers  -->
     <sys:String x:Key="BasicInformationGroupHeader">Basic Information</sys:String>
-    <sys:String x:Key="LocationInformationGroupHeader">Location Information</sys:String>
-    <sys:String x:Key="DatesInformationGroupHeader">Dates Information</sys:String>
     <sys:String x:Key="CassetteInformationGroupHeader">Cassette Information</sys:String>
-    <sys:String x:Key="NotesGroupHeader">Notes</sys:String>
 
     <!--  Basic Information Labels  -->
     <sys:String x:Key="ATMNumberLabel">ATM Number:</sys:String>
@@ -104,17 +66,11 @@
     <sys:String x:Key="BranchNameLabel">Branch Name:</sys:String>
 
     <!--  Location Information Labels  -->
-    <sys:String x:Key="IPAddressLabel">IP Address:</sys:String>
     <sys:String x:Key="ActiveStatusText">Active</sys:String>
-
-    <!--  Dates Information Labels  -->
-    <sys:String x:Key="InstallationDateLabel">Installation Date:</sys:String>
-    <sys:String x:Key="LastMaintenanceDateLabel">Last Maintenance Date:</sys:String>
 
     <!--  Cassette Information Labels  -->
     <sys:String x:Key="CassetteLabel">Cassette</sys:String>
     <sys:String x:Key="DenominationLabel">Denomination</sys:String>
-    <sys:String x:Key="BalanceLabel">Balance</sys:String>
     <sys:String x:Key="Cassette1Label">1</sys:String>
     <sys:String x:Key="Cassette2Label">2</sys:String>
     <sys:String x:Key="Cassette3Label">3</sys:String>
@@ -122,34 +78,16 @@
 
     <!--  Button Labels  -->
     <sys:String x:Key="CancelButtonText">Cancel</sys:String>
-    <sys:String x:Key="SaveButtonText">Save</sys:String>
-    <sys:String x:Key="SavingText">Saving...</sys:String>
 
-    <!--  Common  -->
-    <sys:String x:Key="OK">OK</sys:String>
-    <sys:String x:Key="Close">Close</sys:String>
-    <sys:String x:Key="Back">Back</sys:String>
-    <sys:String x:Key="Next">Next</sys:String>
-    <sys:String x:Key="Previous">Previous</sys:String>
-    <sys:String x:Key="Search">Search</sys:String>
-    <sys:String x:Key="Clear">Clear</sys:String>
-    <sys:String x:Key="Delete">Delete</sys:String>
-    <sys:String x:Key="Edit">Edit</sys:String>
-    <sys:String x:Key="View">View</sys:String>
-    <sys:String x:Key="Save">Save</sys:String>
-    <sys:String x:Key="Cancel">Cancel</sys:String>
-    <sys:String x:Key="Yes">Yes</sys:String>
-    <sys:String x:Key="No">No</sys:String>
+    <!--  GL Reconciliation Strings  -->
+    <sys:String x:Key="GLReconciliation">GL Reconciliation</sys:String>
+    <sys:String x:Key="RemainingCash">Remaining Cash</sys:String>
+    <sys:String x:Key="GLAdjustments">GL Adjustments</sys:String>
+    <sys:String x:Key="GLBalance">GL Balance</sys:String>
+    <sys:String x:Key="Amount">Amount</sys:String>
+    <sys:String x:Key="AdjustmentLabel">Adjustment</sys:String>
 
-    <!--  Validation Messages  -->
-    <sys:String x:Key="RequiredField">This field is required</sys:String>
-    <sys:String x:Key="InvalidFormat">Invalid format</sys:String>
-    <sys:String x:Key="InvalidNumber">Invalid number</sys:String>
-
-    <!--  Confirmation Messages  -->
-    <sys:String x:Key="ConfirmDelete">Are you sure you want to delete this ATM?</sys:String>
-    <sys:String x:Key="ConfirmDeleteTitle">Confirm Delete</sys:String>
-    <sys:String x:Key="OperationSuccessful">Operation completed successfully</sys:String>
-    <sys:String x:Key="OperationFailed">Operation failed. Please try again.</sys:String>
+    <!--  Formula Display  -->
+    <sys:String x:Key="Formula">Formula: GL Balance = Remaining Cash ± GL Adjustments</sys:String>
 
 </ResourceDictionary>

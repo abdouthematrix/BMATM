@@ -20,6 +20,94 @@
     <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="SmallFontSize">12</sys:Double>
     <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="HeaderFontSize">24</sys:Double>
 
+    <!--  Style for table rows  -->
+    <Style x:Key="TableRowStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1,0,1,1" />
+        <Setter Property="Background" Value="White" />
+    </Style>
+
+    <!--  Style for header cells  -->
+    <Style x:Key="HeaderCellStyle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryColor}" />
+    </Style>
+
+    <!--  Style for data cells  -->
+    <Style x:Key="DataCellStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <!--  Style for amount cells  -->
+    <Style x:Key="AmountCellStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!--  Style for operation cells  -->
+    <Style x:Key="OperationCellStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryColor}" />
+    </Style>
+
+    <!--  Style for input textboxes  -->
+    <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Margin" Value="8,4" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <!--  Style for data row borders  -->
+    <Style x:Key="DataRowBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="Background" Value="White" />
+    </Style>
+
+    <!--  Style for last column in data rows  -->
+    <Style x:Key="LastColumnBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="White" />
+    </Style>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Padding" Value="15,8" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="#5E81AC" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#81A1C1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <!--  Header Text Style  -->
     <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
@@ -181,12 +269,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!--  Input TextBox Style (Alternative name)  -->
-    <Style
-        x:Key="InputTextBoxStyle"
-        BasedOn="{StaticResource TextBoxStyle}"
-        TargetType="TextBox" />
 
     <!--  ComboBox Style  -->
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">

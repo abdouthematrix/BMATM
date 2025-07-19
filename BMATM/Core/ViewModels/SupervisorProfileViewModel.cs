@@ -50,6 +50,7 @@ public class SupervisorProfileViewModel : ViewModelBase
     public ICommand EditATMCommand { get; }
     public ICommand DeleteATMCommand { get; }
     public ICommand RefreshCommand { get; }
+    public ICommand ViewATMCommand { get; }
 
     public SupervisorProfileViewModel(DatabaseInitializationManager DatabaseManager)
     {
@@ -60,7 +61,8 @@ public class SupervisorProfileViewModel : ViewModelBase
         AddATMCommand = new RelayCommand(AddATM);
         EditATMCommand = new RelayCommand<ATMInfo>(ExecuteEditATM, CanExecuteEditATM);
         DeleteATMCommand = new RelayCommand<ATMInfo>(ExecuteDeleteATM, CanExecuteDeleteATM);
-        RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());       
+        RefreshCommand = new RelayCommand(async () => await RefreshDataAsync());
+        ViewATMCommand = new RelayCommand<ATMInfo>(ExecuteViewATM, CanExecuteEditATM);
     }
     
 
@@ -147,14 +149,22 @@ public class SupervisorProfileViewModel : ViewModelBase
 
     private void AddATM()
     {
-        NavigationHelper.NavigateTo<AddATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new (SupervisorProfile, null));
+        NavigationHelper.NavigateTo<ATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new (SupervisorProfile, null));
     }
 
     private void ExecuteEditATM(ATMInfo atm)
     {
         if (atm != null)
         {
-            NavigationHelper.NavigateTo<AddATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new(SupervisorProfile, atm));
+            NavigationHelper.NavigateTo<ATMView, KeyValuePair<SupervisorProfile, ATMInfo>>(new(SupervisorProfile, atm));
+        }
+    }
+
+    private void ExecuteViewATM(ATMInfo atm)
+    {
+        if (atm != null)
+        {
+            NavigationHelper.NavigateTo<GLReconciliationView>();
         }
     }
 

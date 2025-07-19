@@ -1,4 +1,5 @@
 ﻿using BMATM.Views;
+using System.Windows.Threading;
 
 namespace BMATM.ViewModels;
 
@@ -28,7 +29,6 @@ public class MainWindowViewModel : ViewModelBase
         get => _currentView;
         set => SetProperty(ref _currentView, value);
     }
-
     public ICommand SwitchLanguageCommand { get; }
 
     public MainWindowViewModel()
@@ -58,5 +58,9 @@ public class MainWindowViewModel : ViewModelBase
 
         CurrentLanguage = newLanguage;        
         App.SetLanguage(newLanguage);
+        if (CurrentView.DataContext is GLReconciliationViewModel model)
+        {
+            model.Refresh();
+        }
     }
 }

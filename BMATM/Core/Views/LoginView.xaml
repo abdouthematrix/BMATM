@@ -44,7 +44,7 @@
 
                 <TextBox
                     Margin="0,0,0,20"
-                    Style="{DynamicResource InputTextBoxStyle}"
+                    Style="{DynamicResource TextBoxStyle}"
                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
 
                 <CheckBox

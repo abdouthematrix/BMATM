@@ -3,9 +3,9 @@
 /// <summary>
 /// Interaction logic for ATMCollectionView.xaml
 /// </summary>
-public partial class AddATMView : UserControl, INavigatable<KeyValuePair<SupervisorProfile, ATMInfo>>
+public partial class ATMView : UserControl, INavigatable<KeyValuePair<SupervisorProfile, ATMInfo>>
 {
-    public AddATMView(ATMViewModel viewModel)
+    public ATMView(ATMViewModel viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;

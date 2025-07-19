@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace BMATM;
 public partial class App : Application
@@ -23,7 +24,6 @@ public partial class App : Application
         var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
-
     private async void ConfigureServices(IServiceCollection services)
     {
         services.AddBMATMDataServices("Data Source=bmatm.db;");
@@ -32,6 +32,7 @@ public partial class App : Application
         services.AddTransient<LoginViewModel>();
         services.AddTransient<SupervisorProfileViewModel>();
         services.AddTransient<ATMViewModel>();
+        services.AddTransient<GLReconciliationViewModel>();
 
         services.AddSingleton<MainWindowViewModel>();
         // ... more VMs
@@ -39,12 +40,12 @@ public partial class App : Application
         // Register Views        
         services.AddTransient<LoginView>();
         services.AddTransient<SupervisorProfileView>();
-        services.AddTransient<AddATMView>();
+        services.AddTransient<ATMView>();
+        services.AddTransient<GLReconciliationView>();
 
         services.AddSingleton<MainWindow>();
         // ... more Views
     }
-
     protected override async void OnExit(ExitEventArgs e)
     {
         await AppHost.StopAsync();
@@ -53,8 +54,6 @@ public partial class App : Application
     }
 
     private static bool _isLanguageMetadataSet = false;
-
-    public static string CurrentLanguage;
     public static void SetLanguage(string languageCode)
     {
         var culture = new CultureInfo(languageCode);
@@ -108,17 +107,15 @@ public partial class App : Application
                 Current.MainWindow.FlowDirection = flowDirection;
         }
 
-        CurrentLanguage = languageCode;
         Settings.Default.Language = languageCode;
         Settings.Default.Save();
-
     }
     public static string GetLocalizedString(string key, params object[] args)
     {
         try
         {
             var resourceDict = Application.Current.Resources.MergedDictionaries
-                .FirstOrDefault(d => d.Source?.OriginalString?.Contains($"Strings.{CurrentLanguage}") == true);
+                .FirstOrDefault(d => d.Source?.OriginalString?.Contains($"Strings.{Settings.Default.Language}") == true);
 
             if (resourceDict != null && resourceDict.Contains(key))
             {
