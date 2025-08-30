@@ -1,12 +1,194 @@
-﻿<Window x:Class="BMATM.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BMATM"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+﻿<Window
+    x:Class="BMATM.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:viewModels="clr-namespace:BMATM.ViewModels"
+    xmlns:views="clr-namespace:BMATM.Views"
+    Title="{Binding WindowTitle}"
+    Width="1024"
+    Height="768"
+    MinWidth="800"
+    MinHeight="600"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+
+    <!--  Window Resources for DataTemplates  -->
+    <Window.Resources>
+        <!--  DataTemplate for Navigation Test View (Phase 2 only)  -->
+        <DataTemplate DataType="{x:Type viewModels:NavigationTestViewModel}">
+            <views:NavigationTestView />
+        </DataTemplate>
+
+        <!--  DataTemplate for Login View  -->
+        <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+            <views:LoginView />
+        </DataTemplate>
+
+        <!--  DataTemplate for ATM Carousel View  -->
+        <DataTemplate DataType="{x:Type viewModels:ATMCarouselViewModel}">
+            <views:ATMCarouselView />
+        </DataTemplate>
+
+        <!--  DataTemplate for Cash Reconciliation View  -->
+        <DataTemplate DataType="{x:Type viewModels:CashReconciliationViewModel}">
+            <views:CashReconciliationView />
+        </DataTemplate>
+
+        <!--  DataTemplate for GL Reconciliation View  -->
+        <DataTemplate DataType="{x:Type viewModels:GLReconciliationViewModel}">
+            <views:GLReconciliationView />
+        </DataTemplate>
+
+        <!--  DataTemplate for Placeholder View (development only)  -->
+        <DataTemplate DataType="{x:Type viewModels:PlaceholderViewModel}">
+            <Border
+                Padding="20"
+                Background="LightGray"
+                BorderBrush="DarkGray"
+                BorderThickness="2"
+                CornerRadius="5">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="{Binding Content}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="14"
+                        Foreground="Gray"
+                        Text="This is a placeholder view for development." />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <!--  Main Window Layout  -->
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <!--  Header  -->
+            <RowDefinition Height="Auto" />
+            <!--  Main Content  -->
+            <RowDefinition Height="*" />
+            <!--  Status Bar  -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header Section  -->
+        <Border
+            Grid.Row="0"
+            Background="#1E3A5F"
+            BorderBrush="#2E4A6F"
+            BorderThickness="0,0,0,2">
+            <Grid Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Logo/Title  -->
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="20,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Ellipse
+                        Width="40"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Fill="White" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="BMATM" />
+                </StackPanel>
+
+                <!--  Center Title  -->
+                <TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Foreground="White"
+                    Text="ATM Management System" />
+
+                <!--  User Info  -->
+                <StackPanel
+                    Grid.Column="2"
+                    Margin="20,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,15,0"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Foreground="White">
+                        <TextBlock.Text>
+                            <Binding
+                                FallbackValue="Phase 2 Testing Mode"
+                                Path="CurrentSupervisor.FullName"
+                                StringFormat="Welcome, {0}" />
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <!--  Logout Button (visible when supervisor is logged in)  -->
+                    <Button
+                        Padding="10,5"
+                        Background="Transparent"
+                        BorderBrush="White"
+                        BorderThickness="1"
+                        Click="LogoutButton_Click"
+                        Content="Logout"
+                        FontSize="12"
+                        Foreground="White">
+                        <Button.Visibility>
+                            <Binding
+                                Converter="{StaticResource NullToVisibilityConverter}"
+                                FallbackValue="Collapsed"
+                                Path="CurrentSupervisor" />
+                        </Button.Visibility>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--  Main Content Area  -->
+        <ContentControl
+            Grid.Row="1"
+            Margin="10"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Content="{Binding CurrentViewModel}" />
+
+        <!--  Status Bar  -->
+        <StatusBar
+            Grid.Row="2"
+            Height="25"
+            Background="#E8E8E8"
+            BorderBrush="#D0D0D0"
+            BorderThickness="0,1,0,0">
+            <StatusBarItem>
+                <TextBlock FontSize="11">
+                    <TextBlock.Text>
+                        <Binding
+                            FallbackValue="Ready"
+                            Path="CurrentViewModel"
+                            StringFormat="Current View: {0}" />
+                    </TextBlock.Text>
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock FontSize="11" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
