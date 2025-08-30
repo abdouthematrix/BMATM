@@ -1,13 +1,10 @@
 ﻿using System;
-using BMATM.ViewModels.Base;
-using BMATM.Services.Navigation;
 using BMATM.Core.Entities;
+using BMATM.Services.Navigation;
+using BMATM.ViewModels.Base;
 
 namespace BMATM.ViewModels
 {
-    /// <summary>
-    /// ViewModel for the main application window
-    /// </summary>
     public class MainWindowViewModel : BaseViewModel
     {
         private BaseViewModel _currentViewModel;
@@ -15,10 +12,6 @@ namespace BMATM.ViewModels
         private Supervisor _currentSupervisor;
         private readonly NavigationService _navigationService;
 
-        /// <summary>
-        /// Initializes a new instance of MainWindowViewModel
-        /// </summary>
-        /// <param name="navigationService">The navigation service</param>
         public MainWindowViewModel(NavigationService navigationService)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
@@ -26,35 +19,45 @@ namespace BMATM.ViewModels
             // Subscribe to navigation events
             _navigationService.NavigationRequested += OnNavigationRequested;
 
-            // Set initial window title
-            WindowTitle = "BMATM - Bank Misr ATM Management System";
+            // Initialize with login view
+            WindowTitle = "BMATM - Branch ATM Management System";
 
-            // Navigate to login view initially (will be implemented in Phase 3)
-            // For now, we'll set a placeholder
-            CurrentViewModel = new PlaceholderViewModel("Login View");
+            // Start with login view
+            NavigateToLogin();
         }
 
-        /// <summary>
-        /// Gets or sets the currently displayed ViewModel
-        /// </summary>
+        #region Properties
+
         public BaseViewModel CurrentViewModel
         {
             get => _currentViewModel;
-            set => SetProperty(ref _currentViewModel, value);
+            set
+            {
+                if (SetProperty(ref _currentViewModel, value))
+                {
+                    // Notify the previous view it's being unloaded
+                    if (_currentViewModel != null)
+                    {
+                        _currentViewModel.OnViewUnloaded();
+                    }
+
+                    // Notify the new view it's being loaded
+                    if (value != null)
+                    {
+                        value.OnViewLoaded();
+                    }
+
+                    UpdateWindowTitle();
+                }
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the main window title
-        /// </summary>
         public string WindowTitle
         {
             get => _windowTitle;
             set => SetProperty(ref _windowTitle, value);
         }
 
-        /// <summary>
-        /// Gets or sets the currently logged-in supervisor
-        /// </summary>
         public Supervisor CurrentSupervisor
         {
             get => _currentSupervisor;
@@ -67,95 +70,81 @@ namespace BMATM.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets the navigation service instance
-        /// </summary>
-        public NavigationService NavigationService => _navigationService;
+        #endregion
 
-        /// <summary>
-        /// Handles navigation requests from the NavigationService
-        /// </summary>
-        /// <param name="viewModel">The ViewModel to navigate to</param>
+        #region Navigation Event Handlers
+
         private void OnNavigationRequested(BaseViewModel viewModel)
         {
-            if (viewModel != null)
-            {
-                // Notify previous ViewModel that it's being unloaded
-                CurrentViewModel?.OnViewUnloaded();
-
-                // Set the new ViewModel
-                CurrentViewModel = viewModel;
-
-                // Notify new ViewModel that it's being loaded
-                CurrentViewModel.OnViewLoaded();
-
-                // Update window title based on current view
-                UpdateWindowTitle();
-            }
+            CurrentViewModel = viewModel;
         }
 
-        /// <summary>
-        /// Updates the window title based on the current context
-        /// </summary>
-        private void UpdateWindowTitle()
-        {
-            var baseTitle = "BMATM - Bank Misr ATM Management System";
+        #endregion
 
-            if (CurrentSupervisor != null)
-            {
-                WindowTitle = $"{baseTitle} - {CurrentSupervisor.FullName}";
-            }
-            else
-            {
-                WindowTitle = baseTitle;
-            }
-        }
+        #region Navigation Methods
 
-        /// <summary>
-        /// Logs out the current supervisor and returns to login
-        /// </summary>
-        public void Logout()
+        private void NavigateToLogin()
         {
+            // Clear current supervisor session
             CurrentSupervisor = null;
             _navigationService.NavigateToLogin();
         }
 
-        /// <summary>
-        /// Called when the main window is closing
-        /// </summary>
-        public void OnWindowClosing()
+        public void HandleSuccessfulLogin(Supervisor supervisor)
         {
-            // Perform cleanup
-            CurrentViewModel?.OnViewUnloaded();
-
-            // Unsubscribe from navigation events
-            _navigationService.NavigationRequested -= OnNavigationRequested;
-        }
-    }
-
-    /// <summary>
-    /// Placeholder ViewModel for testing navigation during development
-    /// </summary>
-    public class PlaceholderViewModel : BaseViewModel
-    {
-        private string _content;
-
-        /// <summary>
-        /// Initializes a new instance of PlaceholderViewModel
-        /// </summary>
-        /// <param name="content">The content to display</param>
-        public PlaceholderViewModel(string content)
-        {
-            Content = content;
+            CurrentSupervisor = supervisor;
+            _navigationService.NavigateToATMCarousel(supervisor);
         }
 
-        /// <summary>
-        /// Gets or sets the content to display
-        /// </summary>
-        public string Content
+        public void HandleLogout()
         {
-            get => _content;
-            set => SetProperty(ref _content, value);
+            NavigateToLogin();
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        private void UpdateWindowTitle()
+        {
+            if (CurrentSupervisor != null)
+            {
+                WindowTitle = $"BMATM - {CurrentSupervisor.FullName} - {GetCurrentViewTitle()}";
+            }
+            else
+            {
+                WindowTitle = "BMATM - Branch ATM Management System";
+            }
+        }
+
+        private string GetCurrentViewTitle()
+        {
+            switch (CurrentViewModel)
+            {
+                case LoginViewModel _: return "Login";
+                case ATMCarouselViewModel _: return "ATM Management";
+                case CashReconciliationViewModel _: return "Cash Reconciliation";
+                case GLReconciliationViewModel _: return "GL Reconciliation";
+                default: return "System";
+            }
+        }
+
+
+        #endregion
+
+        #region Cleanup
+
+        public override void OnViewUnloaded()
+        {
+            base.OnViewUnloaded();
+
+            // Unsubscribe from events to prevent memory leaks
+            if (_navigationService != null)
+            {
+                _navigationService.NavigationRequested -= OnNavigationRequested;
+            }
+        }
+
+        #endregion
     }
 }

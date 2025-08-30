@@ -1,21 +1,29 @@
-﻿using BMATM.ViewModels.Base;
+﻿using BMATM.Core.Entities;
+using BMATM.Data.Repositories;
 using BMATM.Services.Navigation;
+using BMATM.ViewModels.Base;
+using System;
 
 namespace BMATM.ViewModels
 {
     /// <summary>
-    /// ViewModel for the GL reconciliation view (placeholder for Phase 7)
+    /// Placeholder GLReconciliationViewModel for Phase 3 compilation
+    /// This will be fully implemented in Phase 7
     /// </summary>
-    public class GLReconciliationViewModel : BaseViewModel, IParameterizedViewModel
+    public class GLReconciliationViewModel : BaseViewModel
     {
-        public GLReconciliationViewModel()
+        private readonly TransactionRepository _transactionRepository;
+        private readonly NavigationService _navigationService;
+
+        public GLReconciliationViewModel(TransactionRepository transactionRepository, NavigationService navigationService)
         {
-            // Will be implemented in Phase 7
+            _transactionRepository = transactionRepository;
+            _navigationService = navigationService;
         }
 
-        public void SetParameter(object parameter)
+        public void Initialize(ATM atm, DateTime date)
         {
-            // Will be implemented in Phase 7
+            // Placeholder - will be implemented in Phase 7
         }
     }
 }

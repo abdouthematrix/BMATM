@@ -1,21 +1,35 @@
-﻿using BMATM.ViewModels.Base;
+﻿using BMATM.Core.Entities;
+using BMATM.Data.Repositories;
 using BMATM.Services.Navigation;
+using BMATM.ViewModels.Base;
 
 namespace BMATM.ViewModels
-{    
+{
     /// <summary>
-    /// ViewModel for the ATM carousel view (placeholder for Phase 4)
+    /// Placeholder ATMCarouselViewModel for Phase 3 compilation
+    /// This will be fully implemented in Phase 4
     /// </summary>
-    public class ATMCarouselViewModel : BaseViewModel, IParameterizedViewModel
+    public class ATMCarouselViewModel : BaseViewModel
     {
-        public ATMCarouselViewModel()
+        private readonly ATMRepository _atmRepository;
+        private readonly NavigationService _navigationService;
+        private Supervisor _currentSupervisor;
+
+        public ATMCarouselViewModel(ATMRepository atmRepository, NavigationService navigationService)
         {
-            // Will be implemented in Phase 4
+            _atmRepository = atmRepository;
+            _navigationService = navigationService;
         }
 
-        public void SetParameter(object parameter)
+        public Supervisor CurrentSupervisor
         {
-            // Will be implemented in Phase 4
+            get => _currentSupervisor;
+            set => SetProperty(ref _currentSupervisor, value);
+        }
+
+        public void LoadATMs(int supervisorId)
+        {
+            // Placeholder - will be implemented in Phase 4
         }
     }
 }

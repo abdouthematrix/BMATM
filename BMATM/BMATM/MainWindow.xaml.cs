@@ -1,7 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
-using BMATM.ViewModels;
+using BMATM.Data;
+using BMATM.Data.Repositories;
+using BMATM.Data.Schema;
 using BMATM.Services.Navigation;
+using BMATM.ViewModels;
 
 namespace BMATM
 {
@@ -10,73 +14,80 @@ namespace BMATM
     /// </summary>
     public partial class MainWindow : Window
     {
-        /// <summary>
-        /// Gets the MainWindowViewModel instance
-        /// </summary>
-        public MainWindowViewModel ViewModel { get; private set; }
+        private MainWindowViewModel _viewModel;
+        private SQLiteConnectionFactory _connectionFactory;
 
-        /// <summary>
-        /// Initializes a new instance of MainWindow
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-
-            // Initialize the navigation service
-            var navigationService = new NavigationService();
-
-            // Create and set the DataContext
-            ViewModel = new MainWindowViewModel(navigationService);
-            DataContext = ViewModel;
-
-            // Handle window closing event
-            Closing += MainWindow_Closing;
+            InitializeApplication();
         }
 
-        /// <summary>
-        /// Alternative constructor that accepts a ViewModel (for dependency injection)
-        /// </summary>
-        /// <param name="viewModel">The MainWindowViewModel instance</param>
-        public MainWindow(MainWindowViewModel viewModel)
+        private void InitializeApplication()
         {
-            InitializeComponent();
-
-            ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            DataContext = ViewModel;
-
-            // Handle window closing event
-            Closing += MainWindow_Closing;
-        }
-
-        /// <summary>
-        /// Handles the logout button click event
-        /// </summary>
-        /// <param name="sender">The event sender</param>
-        /// <param name="e">The event arguments</param>
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Show confirmation dialog
-            var result = MessageBox.Show(
-                "Are you sure you want to logout?",
-                "Confirm Logout",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
+            try
             {
-                ViewModel.Logout();
+                // Initialize database
+                InitializeDatabase();
+
+                // Initialize repositories
+                var supervisorRepository = new SupervisorRepository(_connectionFactory);
+                var atmRepository = new ATMRepository(_connectionFactory);
+                var transactionRepository = new TransactionRepository(_connectionFactory);
+
+                // Initialize navigation service
+                var navigationService = new NavigationService(supervisorRepository, atmRepository, transactionRepository);
+
+                // Initialize main viewmodel
+                _viewModel = new MainWindowViewModel(navigationService);
+                DataContext = _viewModel;
+
+                // Handle application closing
+                Closing += MainWindow_Closing;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Failed to initialize application: {ex.Message}",
+                    "Initialization Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                Application.Current.Shutdown(1);
             }
         }
 
-        /// <summary>
-        /// Handles the main window closing event
-        /// </summary>
-        /// <param name="sender">The event sender</param>
-        /// <param name="e">The event arguments</param>
+        private void InitializeDatabase()
+        {
+            try
+            {
+                // Create database in application directory
+                string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string databasePath = Path.Combine(appDirectory, "BMATM.db");
+
+                _connectionFactory = new SQLiteConnectionFactory(databasePath);
+
+                // Initialize database schema and sample data
+                var databaseInitializer = new DatabaseInitializer(_connectionFactory);
+                databaseInitializer.InitializeDatabase();
+
+                // Verify database connection
+                using (var connection = _connectionFactory.CreateConnection())
+                {
+                    connection.Open();
+                    // Database is ready
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to initialize database", ex);
+            }
+        }
+
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Check if there's an active operation that shouldn't be interrupted
-            if (ViewModel.CurrentSupervisor != null)
+            // Confirm exit if user is logged in
+            if (_viewModel?.CurrentSupervisor != null)
             {
                 var result = MessageBox.Show(
                     "Are you sure you want to exit the application?",
@@ -91,40 +102,8 @@ namespace BMATM
                 }
             }
 
-            // Perform cleanup
-            ViewModel.OnWindowClosing();
-        }
-
-        /// <summary>
-        /// Shows an error message to the user
-        /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="title">The dialog title</param>
-        public void ShowError(string message, string title = "Error")
-        {
-            MessageBox.Show(this, message, title, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        /// <summary>
-        /// Shows an information message to the user
-        /// </summary>
-        /// <param name="message">The information message</param>
-        /// <param name="title">The dialog title</param>
-        public void ShowInformation(string message, string title = "Information")
-        {
-            MessageBox.Show(this, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        /// <summary>
-        /// Shows a confirmation dialog to the user
-        /// </summary>
-        /// <param name="message">The confirmation message</param>
-        /// <param name="title">The dialog title</param>
-        /// <returns>True if the user confirmed, false otherwise</returns>
-        public bool ShowConfirmation(string message, string title = "Confirm")
-        {
-            var result = MessageBox.Show(this, message, title, MessageBoxButton.YesNo, MessageBoxImage.Question);
-            return result == MessageBoxResult.Yes;
+            // Cleanup
+            _viewModel?.OnViewUnloaded();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 
 namespace BMATM.Views
-{    
+{
     /// <summary>
-    /// Interaction logic for ATMCarouselView.xaml
+    /// Placeholder for ATMCarouselView - will be implemented in Phase 4
     /// </summary>
     public partial class ATMCarouselView : UserControl
     {

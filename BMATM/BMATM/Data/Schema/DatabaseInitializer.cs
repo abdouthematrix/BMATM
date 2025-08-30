@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
-using BMATM.Core.Constants;
-using BMATM.Data.Repositories;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BMATM.Data.Schema
 {
@@ -14,33 +14,36 @@ namespace BMATM.Data.Schema
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
 
-        public void InitializeSchema()
+        public void InitializeDatabase()
         {
+            CreateTables();
+            SeedInitialData();
+        }
+
+        private void CreateTables()
+        {
+            string[] createTableScripts = {
+                CreateSupervisorsTable(),
+                CreateATMsTable(),
+                CreateATMTransactionsTable(),
+                CreateAuditLogTable()
+            };
+
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Open();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        CreateSupervisorsTable(connection);
-                        CreateATMsTable(connection);
-                        CreateATMTransactionsTable(connection);
-                        CreateAuditLogTable(connection);
-                        CreateIndexes(connection);
 
-                        transaction.Commit();
-                    }
-                    catch
+                foreach (var script in createTableScripts)
+                {
+                    using (var command = new SQLiteCommand(script, connection))
                     {
-                        transaction.Rollback();
-                        throw;
+                        command.ExecuteNonQuery();
                     }
                 }
             }
         }
 
-        public void SeedSampleData()
+        private void SeedInitialData()
         {
             using (var connection = _connectionFactory.CreateConnection())
             {
@@ -51,33 +54,66 @@ namespace BMATM.Data.Schema
                 {
                     var count = Convert.ToInt32(checkCommand.ExecuteScalar());
                     if (count > 0)
-                    {
-                        return; // Data already exists, don't seed again
-                    }
+                        return; // Data already exists
                 }
 
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        SeedSupervisors(connection);
-                        SeedATMs(connection);
-                        SeedSampleTransactions(connection);
+                // Insert sample supervisor
+                string passwordHash = HashPassword("password123");
+                string insertSupervisor = @"
+                    INSERT INTO Supervisors (Username, PasswordHash, FullName, Email, IsActive, CreatedDate) 
+                    VALUES (@Username, @PasswordHash, @FullName, @Email, @IsActive, @CreatedDate)";
 
-                        transaction.Commit();
-                    }
-                    catch
+                using (var command = new SQLiteCommand(insertSupervisor, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", "abdelrahmanhas");
+                    command.Parameters.AddWithValue("@PasswordHash", passwordHash);
+                    command.Parameters.AddWithValue("@FullName", "Abdelrahman Hassan");
+                    command.Parameters.AddWithValue("@Email", "abdelrahmanhas@banquemisr.com");
+                    command.Parameters.AddWithValue("@IsActive", true);
+                    command.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+                    command.ExecuteNonQuery();
+                }
+
+                // Get the supervisor ID
+                long supervisorId;
+                using (var command = new SQLiteCommand("SELECT last_insert_rowid()", connection))
+                {
+                    supervisorId = (long)command.ExecuteScalar();
+                }
+
+                // Insert sample ATMs
+                string insertATM = @"
+                    INSERT INTO ATMs (SupervisorId, Name, Branch, GLNumber, ATMType, CassetteCount, IsActive, CreatedDate) 
+                    VALUES (@SupervisorId, @Name, @Branch, @GLNumber, @ATMType, @CassetteCount, @IsActive, @CreatedDate)";
+
+                var sampleATMs = new[]
+                {
+                    new { Name = "Sheraton Cairo Hotel ATM", Branch = "707", GLNumber = "101103576", ATMType = "DN", CassetteCount = 4 },
+                    new { Name = "New Cairo Branch ATM 1", Branch = "708", GLNumber = "101103577", ATMType = "TT", CassetteCount = 6 },
+                    new { Name = "Maadi Branch ATM", Branch = "709", GLNumber = "101103578", ATMType = "DN", CassetteCount = 4 }
+                };
+
+                foreach (var atm in sampleATMs)
+                {
+                    using (var command = new SQLiteCommand(insertATM, connection))
                     {
-                        transaction.Rollback();
-                        throw;
+                        command.Parameters.AddWithValue("@SupervisorId", supervisorId);
+                        command.Parameters.AddWithValue("@Name", atm.Name);
+                        command.Parameters.AddWithValue("@Branch", atm.Branch);
+                        command.Parameters.AddWithValue("@GLNumber", atm.GLNumber);
+                        command.Parameters.AddWithValue("@ATMType", atm.ATMType);
+                        command.Parameters.AddWithValue("@CassetteCount", atm.CassetteCount);
+                        command.Parameters.AddWithValue("@IsActive", true);
+                        command.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+                        command.ExecuteNonQuery();
                     }
                 }
             }
         }
 
-        private void CreateSupervisorsTable(SQLiteConnection connection)
+        private string CreateSupervisorsTable()
         {
-            var sql = @"
+            return @"
                 CREATE TABLE IF NOT EXISTS Supervisors (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Username TEXT NOT NULL UNIQUE,
@@ -87,17 +123,12 @@ namespace BMATM.Data.Schema
                     IsActive BOOLEAN DEFAULT 1,
                     CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                     LastLoginDate DATETIME
-                );";
-
-            using (var command = new SQLiteCommand(sql, connection))
-            {
-                command.ExecuteNonQuery();
-            }
+                )";
         }
 
-        private void CreateATMsTable(SQLiteConnection connection)
+        private string CreateATMsTable()
         {
-            var sql = @"
+            return @"
                 CREATE TABLE IF NOT EXISTS ATMs (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     SupervisorId INTEGER NOT NULL,
@@ -109,17 +140,12 @@ namespace BMATM.Data.Schema
                     IsActive BOOLEAN DEFAULT 1,
                     CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (SupervisorId) REFERENCES Supervisors(Id)
-                );";
-
-            using (var command = new SQLiteCommand(sql, connection))
-            {
-                command.ExecuteNonQuery();
-            }
+                )";
         }
 
-        private void CreateATMTransactionsTable(SQLiteConnection connection)
+        private string CreateATMTransactionsTable()
         {
-            var sql = @"
+            return @"
                 CREATE TABLE IF NOT EXISTS ATMTransactions (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     ATMId INTEGER NOT NULL,
@@ -131,22 +157,17 @@ namespace BMATM.Data.Schema
                     DepositedCash DECIMAL(15,2),
                     GLBalance DECIMAL(15,2),
                     IsReconciled BOOLEAN DEFAULT 0,
-                    ReconciliationStatus TEXT DEFAULT 'Pending',
+                    ReconciliationStatus TEXT,
                     Variance DECIMAL(15,2),
                     Notes TEXT,
                     CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (ATMId) REFERENCES ATMs(Id)
-                );";
-
-            using (var command = new SQLiteCommand(sql, connection))
-            {
-                command.ExecuteNonQuery();
-            }
+                )";
         }
 
-        private void CreateAuditLogTable(SQLiteConnection connection)
+        private string CreateAuditLogTable()
         {
-            var sql = @"
+            return @"
                 CREATE TABLE IF NOT EXISTS AuditLog (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     TableName TEXT NOT NULL,
@@ -155,193 +176,20 @@ namespace BMATM.Data.Schema
                     OldValues TEXT,
                     NewValues TEXT,
                     UserId INTEGER,
-                    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (UserId) REFERENCES Supervisors(Id)
-                );";
-
-            using (var command = new SQLiteCommand(sql, connection))
-            {
-                command.ExecuteNonQuery();
-            }
+                    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )";
         }
 
-        private void CreateIndexes(SQLiteConnection connection)
+        private string HashPassword(string password)
         {
-            var indexes = new[]
-            {
-                "CREATE INDEX IF NOT EXISTS IX_Supervisors_Username ON Supervisors(Username);",
-                "CREATE INDEX IF NOT EXISTS IX_Supervisors_IsActive ON Supervisors(IsActive);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMs_SupervisorId ON ATMs(SupervisorId);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMs_Branch ON ATMs(Branch);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMs_GLNumber ON ATMs(GLNumber);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMs_IsActive ON ATMs(IsActive);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMTransactions_ATMId ON ATMTransactions(ATMId);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMTransactions_TransactionDate ON ATMTransactions(TransactionDate);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMTransactions_ReconciliationStatus ON ATMTransactions(ReconciliationStatus);",
-                "CREATE INDEX IF NOT EXISTS IX_ATMTransactions_IsReconciled ON ATMTransactions(IsReconciled);",
-                "CREATE INDEX IF NOT EXISTS IX_AuditLog_TableName_RecordId ON AuditLog(TableName, RecordId);",
-                "CREATE INDEX IF NOT EXISTS IX_AuditLog_Timestamp ON AuditLog(Timestamp);"
-            };
+            if (string.IsNullOrEmpty(password))
+                return string.Empty;
 
-            foreach (var indexSql in indexes)
+            using (var sha256 = SHA256.Create())
             {
-                using (var command = new SQLiteCommand(indexSql, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password + "BMATM_SALT"));
+                return Convert.ToBase64String(hashedBytes);
             }
-        }
-
-        private void SeedSupervisors(SQLiteConnection connection)
-        {
-            var supervisors = new[]
-            {
-                new { Username = "abdelrahmanhas", Password = "password123", FullName = "Abdelrahman Hassan", Email = "abdelrahmanhas@banquemisr.com" },
-                new { Username = "supervisor1", Password = "supervisor123", FullName = "Ahmed Mohamed", Email = "ahmed.mohamed@banquemisr.com" },
-                new { Username = "supervisor2", Password = "supervisor123", FullName = "Fatima Ali", Email = "fatima.ali@banquemisr.com" }
-            };
-
-            foreach (var supervisor in supervisors)
-            {
-                var passwordHash = SupervisorRepository.HashPassword(supervisor.Password);
-                var sql = @"
-                    INSERT INTO Supervisors (Username, PasswordHash, FullName, Email, IsActive, CreatedDate)
-                    VALUES (@username, @passwordHash, @fullName, @email, 1, @createdDate);";
-
-                using (var command = new SQLiteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@username", supervisor.Username);
-                    command.Parameters.AddWithValue("@passwordHash", passwordHash);
-                    command.Parameters.AddWithValue("@fullName", supervisor.FullName);
-                    command.Parameters.AddWithValue("@email", supervisor.Email);
-                    command.Parameters.AddWithValue("@createdDate", DateTime.Now);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        private void SeedATMs(SQLiteConnection connection)
-        {
-            var atms = new[]
-            {
-                new { SupervisorId = 1, Name = "Sheraton Cairo Hotel ATM", Branch = "707", GLNumber = "101103576", ATMType = "DN", CassetteCount = 4 },
-                new { SupervisorId = 1, Name = "Nile City Towers ATM", Branch = "707", GLNumber = "101103577", ATMType = "NCR", CassetteCount = 4 },
-                new { SupervisorId = 1, Name = "Four Seasons Hotel ATM", Branch = "707", GLNumber = "101103578", ATMType = "DN", CassetteCount = 6 },
-                new { SupervisorId = 2, Name = "Cairo International Airport ATM", Branch = "150", GLNumber = "101105001", ATMType = "Wincor", CassetteCount = 4 },
-                new { SupervisorId = 2, Name = "Mall of Egypt ATM", Branch = "150", GLNumber = "101105002", ATMType = "Hyosung", CassetteCount = 4 },
-                new { SupervisorId = 3, Name = "City Stars Mall ATM", Branch = "200", GLNumber = "101107001", ATMType = "DN", CassetteCount = 4 },
-                new { SupervisorId = 3, Name = "Maadi Branch ATM", Branch = "200", GLNumber = "101107002", ATMType = "NCR", CassetteCount = 4 }
-            };
-
-            foreach (var atm in atms)
-            {
-                var sql = @"
-                    INSERT INTO ATMs (SupervisorId, Name, Branch, GLNumber, ATMType, CassetteCount, IsActive, CreatedDate)
-                    VALUES (@supervisorId, @name, @branch, @glNumber, @atmType, @cassetteCount, 1, @createdDate);";
-
-                using (var command = new SQLiteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@supervisorId", atm.SupervisorId);
-                    command.Parameters.AddWithValue("@name", atm.Name);
-                    command.Parameters.AddWithValue("@branch", atm.Branch);
-                    command.Parameters.AddWithValue("@glNumber", atm.GLNumber);
-                    command.Parameters.AddWithValue("@atmType", atm.ATMType);
-                    command.Parameters.AddWithValue("@cassetteCount", atm.CassetteCount);
-                    command.Parameters.AddWithValue("@createdDate", DateTime.Now);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        private void SeedSampleTransactions(SQLiteConnection connection)
-        {
-            var random = new Random();
-            var baseDate = DateTime.Today.AddDays(-30);
-
-            // Create some sample transactions for testing
-            for (int i = 0; i < 20; i++)
-            {
-                var transactionDate = baseDate.AddDays(random.Next(0, 30));
-                var atmId = random.Next(1, 8); // ATM IDs 1-7
-                var beginningCash = random.Next(50000, 200000);
-                var addedCash = random.Next(0, 100000);
-                var recycledCash = random.Next(0, 50000);
-                var depositedCash = random.Next(10000, 80000);
-                var endingCash = beginningCash + addedCash + recycledCash - depositedCash + random.Next(-1000, 1000);
-                var variance = random.Next(-500, 500);
-
-                string status;
-                if (Math.Abs(variance) <= 1)
-                    status = AppConstants.STATUS_BALANCED;
-                else if (variance < 0)
-                    status = AppConstants.STATUS_SHORTAGE;
-                else
-                    status = AppConstants.STATUS_OVER;
-
-                var sql = @"
-                    INSERT INTO ATMTransactions (
-                        ATMId, TransactionDate, BeginningCash, AddedCash, RecycledCash, 
-                        EndingCash, DepositedCash, IsReconciled, ReconciliationStatus, 
-                        Variance, CreatedDate
-                    ) VALUES (
-                        @atmId, @transactionDate, @beginningCash, @addedCash, @recycledCash,
-                        @endingCash, @depositedCash, @isReconciled, @reconciliationStatus,
-                        @variance, @createdDate
-                    );";
-
-                using (var command = new SQLiteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@atmId", atmId);
-                    command.Parameters.AddWithValue("@transactionDate", transactionDate);
-                    command.Parameters.AddWithValue("@beginningCash", beginningCash);
-                    command.Parameters.AddWithValue("@addedCash", addedCash);
-                    command.Parameters.AddWithValue("@recycledCash", recycledCash);
-                    command.Parameters.AddWithValue("@endingCash", endingCash);
-                    command.Parameters.AddWithValue("@depositedCash", depositedCash);
-                    command.Parameters.AddWithValue("@isReconciled", status != AppConstants.STATUS_PENDING ? 1 : 0);
-                    command.Parameters.AddWithValue("@reconciliationStatus", status);
-                    command.Parameters.AddWithValue("@variance", variance);
-                    command.Parameters.AddWithValue("@createdDate", DateTime.Now);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
-        public void DropAllTables()
-        {
-            using (var connection = _connectionFactory.CreateConnection())
-            {
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        var tables = new[] { "AuditLog", "ATMTransactions", "ATMs", "Supervisors" };
-
-                        foreach (var table in tables)
-                        {
-                            using (var command = new SQLiteCommand($"DROP TABLE IF EXISTS {table}", connection))
-                            {
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        transaction.Commit();
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-            }
-        }
-
-        public void RecreateDatabase()
-        {
-            DropAllTables();
-            InitializeSchema();
-            SeedSampleData();
         }
     }
 }

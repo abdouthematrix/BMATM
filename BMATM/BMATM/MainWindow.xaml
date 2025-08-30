@@ -4,190 +4,104 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:viewModels="clr-namespace:BMATM.ViewModels"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:views="clr-namespace:BMATM.Views"
+    xmlns:vm="clr-namespace:BMATM.ViewModels"
     Title="{Binding WindowTitle}"
-    Width="1024"
-    Height="768"
+    Width="1000"
+    Height="700"
     MinWidth="800"
     MinHeight="600"
+    Icon="app-icon.ico"
     WindowStartupLocation="CenterScreen"
-    WindowState="Maximized"
+    WindowState="Normal"
     mc:Ignorable="d">
 
-    <!--  Window Resources for DataTemplates  -->
     <Window.Resources>
-        <!--  DataTemplate for Navigation Test View (Phase 2 only)  -->
-        <DataTemplate DataType="{x:Type viewModels:NavigationTestViewModel}">
-            <views:NavigationTestView />
-        </DataTemplate>
-
-        <!--  DataTemplate for Login View  -->
-        <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+        <!--  ViewModelLocator - Maps ViewModels to Views  -->
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView />
         </DataTemplate>
 
-        <!--  DataTemplate for ATM Carousel View  -->
-        <DataTemplate DataType="{x:Type viewModels:ATMCarouselViewModel}">
+        <DataTemplate DataType="{x:Type vm:ATMCarouselViewModel}">
             <views:ATMCarouselView />
         </DataTemplate>
 
-        <!--  DataTemplate for Cash Reconciliation View  -->
-        <DataTemplate DataType="{x:Type viewModels:CashReconciliationViewModel}">
+        <DataTemplate DataType="{x:Type vm:CashReconciliationViewModel}">
             <views:CashReconciliationView />
         </DataTemplate>
 
-        <!--  DataTemplate for GL Reconciliation View  -->
-        <DataTemplate DataType="{x:Type viewModels:GLReconciliationViewModel}">
+        <DataTemplate DataType="{x:Type vm:GLReconciliationViewModel}">
             <views:GLReconciliationView />
         </DataTemplate>
 
-        <!--  DataTemplate for Placeholder View (development only)  -->
-        <DataTemplate DataType="{x:Type viewModels:PlaceholderViewModel}">
-            <Border
-                Padding="20"
-                Background="LightGray"
-                BorderBrush="DarkGray"
-                BorderThickness="2"
-                CornerRadius="5">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock
-                        Margin="0,0,0,10"
-                        HorizontalAlignment="Center"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Text="{Binding Content}" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        FontSize="14"
-                        Foreground="Gray"
-                        Text="This is a placeholder view for development." />
-                </StackPanel>
-            </Border>
-        </DataTemplate>
+        <!--  Window Style  -->
+        <Style TargetType="Window">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Offset="0" Color="#F8FAFC" />
+                        <GradientStop Offset="1" Color="#E2E8F0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <!--  Main Window Layout  -->
-    <Grid Background="#F5F5F5">
-        <Grid.RowDefinitions>
-            <!--  Header  -->
-            <RowDefinition Height="Auto" />
-            <!--  Main Content  -->
-            <RowDefinition Height="*" />
-            <!--  Status Bar  -->
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <!--  Header Section  -->
-        <Border
-            Grid.Row="0"
-            Background="#1E3A5F"
-            BorderBrush="#2E4A6F"
-            BorderThickness="0,0,0,2">
-            <Grid Height="60">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <!--  Logo/Title  -->
-                <StackPanel
-                    Grid.Column="0"
-                    Margin="20,0"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <Ellipse
-                        Width="40"
-                        Height="40"
-                        Margin="0,0,10,0"
-                        Fill="White" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        Text="BMATM" />
-                </StackPanel>
-
-                <!--  Center Title  -->
-                <TextBlock
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="16"
-                    Foreground="White"
-                    Text="ATM Management System" />
-
-                <!--  User Info  -->
-                <StackPanel
-                    Grid.Column="2"
-                    Margin="20,0"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <TextBlock
-                        Margin="0,0,15,0"
-                        VerticalAlignment="Center"
-                        FontSize="14"
-                        Foreground="White">
-                        <TextBlock.Text>
-                            <Binding
-                                FallbackValue="Phase 2 Testing Mode"
-                                Path="CurrentSupervisor.FullName"
-                                StringFormat="Welcome, {0}" />
-                        </TextBlock.Text>
-                    </TextBlock>
-
-                    <!--  Logout Button (visible when supervisor is logged in)  -->
-                    <Button
-                        Padding="10,5"
-                        Background="Transparent"
-                        BorderBrush="White"
-                        BorderThickness="1"
-                        Click="LogoutButton_Click"
-                        Content="Logout"
-                        FontSize="12"
-                        Foreground="White">
-                        <Button.Visibility>
-                            <Binding
-                                Converter="{StaticResource NullToVisibilityConverter}"
-                                FallbackValue="Collapsed"
-                                Path="CurrentSupervisor" />
-                        </Button.Visibility>
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </Border>
-
+    <Grid>
         <!--  Main Content Area  -->
         <ContentControl
-            Grid.Row="1"
-            Margin="10"
-            HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Stretch"
-            Content="{Binding CurrentViewModel}" />
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Content="{Binding CurrentViewModel}">
+            <!--  Smooth transition animation  -->
+            <ContentControl.ContentTemplate>
+                <DataTemplate>
+                    <Border>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            AccelerationRatio="0.2"
+                                            Storyboard.TargetProperty="Opacity"
+                                            From="0"
+                                            To="1"
+                                            Duration="0:0:0.3" />
+                                        <ThicknessAnimation
+                                            AccelerationRatio="0.2"
+                                            Storyboard.TargetProperty="Margin"
+                                            From="0,20,0,0"
+                                            To="0,0,0,0"
+                                            Duration="0:0:0.3" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <ContentPresenter Content="{Binding}" />
+                    </Border>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
 
-        <!--  Status Bar  -->
+        <!--  Status Bar (Optional)  -->
         <StatusBar
-            Grid.Row="2"
-            Height="25"
-            Background="#E8E8E8"
-            BorderBrush="#D0D0D0"
+            Height="24"
+            VerticalAlignment="Bottom"
+            Background="#F1F5F9"
+            BorderBrush="#E2E8F0"
             BorderThickness="0,1,0,0">
             <StatusBarItem>
-                <TextBlock FontSize="11">
-                    <TextBlock.Text>
-                        <Binding
-                            FallbackValue="Ready"
-                            Path="CurrentViewModel"
-                            StringFormat="Current View: {0}" />
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock
+                    FontSize="11"
+                    Foreground="#64748B"
+                    Text="Ready" />
             </StatusBarItem>
-            <Separator />
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock FontSize="11" Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='dd/MM/yyyy HH:mm:ss'}" />
+                <TextBlock FontSize="11" Foreground="#64748B">
+                    <Run Text="Connected • " />
+                    <Run Text="{Binding Source={x:Static system:DateTime.Now}, Mode=OneTime, StringFormat='yyyy-MM-dd HH:mm'}" />
+                </TextBlock>
             </StatusBarItem>
         </StatusBar>
     </Grid>

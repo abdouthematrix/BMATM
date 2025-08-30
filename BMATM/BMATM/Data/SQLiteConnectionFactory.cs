@@ -32,26 +32,26 @@ namespace BMATM.Data
             }
         }
 
-        public void InitializeDatabase()
-        {
-            try
-            {
-                // Create database file if it doesn't exist
-                if (!DatabaseExists())
-                {
-                    CreateDatabaseFile();
-                }
+        //public void InitializeDatabase()
+        //{
+        //    try
+        //    {
+        //        // Create database file if it doesn't exist
+        //        if (!DatabaseExists())
+        //        {
+        //            CreateDatabaseFile();
+        //        }
 
-                // Initialize schema and sample data
-                var initializer = new DatabaseInitializer(this);
-                initializer.InitializeSchema();
-                initializer.SeedSampleData();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Failed to initialize database.", ex);
-            }
-        }
+        //        // Initialize schema and sample data
+        //        var initializer = new DatabaseInitializer(this);
+        //        initializer.InitializeSchema();
+        //        initializer.SeedSampleData();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new InvalidOperationException("Failed to initialize database.", ex);
+        //    }
+        //}
 
         public bool DatabaseExists()
         {
